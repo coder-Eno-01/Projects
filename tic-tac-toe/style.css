@@ -1,0 +1,352 @@
+body{
+    flex: 1 0 auto;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: hsl(0, 1%, 19%);
+    text-align: center;
+    overflow: hidden;
+    min-height: 100vh;
+    min-width: 100vw;
+}
+
+main{
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: auto;
+}
+
+footer{
+    display: inline-block;
+    flex: 0 1 auto;
+    align-self: flex-end;
+    background-color: black;
+    border-radius: 10px;
+    padding: 0px 10px;
+    margin-right: 3px;
+    margin-bottom: 3px;
+}
+
+footer h4{
+    margin: 8px;
+    font-family: times, verdana;
+    color: white;
+}
+
+.designBox{
+    display: inline-block;
+    width: 80vw;
+    height: 10vh;
+    z-index: -1;
+    transform: rotateZ(150deg);
+    animation-name: glowBox;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+}
+
+#topLeft{
+    position: absolute;
+    margin: 0px;
+    top: 0;
+    right: 30vw;
+}
+
+#bottomRight{
+    position: absolute;
+    bottom: 0;
+    right: -20%;
+}
+
+#middle{
+    position: absolute;
+    width: 200vw;
+    left: -75%;
+    bottom: 25%
+}
+
+/* Header Section */
+
+header{
+    text-align: center;
+    border: 3px solid white;
+    border-radius: 10px;
+    background-color: hsl(0, 13%, 6%);
+    padding: 5px;
+    margin: 15px;
+    animation: glow;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+}
+
+header h1{
+    margin: 10px;
+    padding: 2px;
+    color: hsl(0, 13%, 6%);
+    font-size: 3.5em;
+}
+
+header h1{
+    animation-name: glow2;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+}
+
+header h2{
+    display: inline-block;
+    font-family: monospace;
+    background-color:hsl(134, 78%, 42%);
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    animation-name: glow;
+    animation-duration:10s;
+    animation-iteration-count: infinite;
+    border-radius: 10px;
+}
+
+@keyframes glow{
+    0%, 100%{
+        box-shadow: 0px 0px 10px hsl(0, 100%, 50%);
+        border-color: hsl(0, 100%, 50%)
+    }
+    10%{
+        box-shadow: 0px 0px 10px hsl(0, 100%, 50%);
+        border-color: hsl(0, 100%, 50%)
+    }
+    20%{
+        box-shadow: 0px 0px 10px hsl(22, 100%, 50%);
+        border-color: hsl(22, 100%, 50%);
+    }
+    30%{
+        box-shadow: 0px 0px 10px hsl(58, 100%, 50%);
+        border-color: hsl(58, 100%, 50%);
+    }
+    40%{
+        box-shadow: 0px 0px 10px hsl(92, 100%, 50%);
+        border-color: hsl(92, 100%, 50%);
+    }
+    50%{
+        box-shadow: 0px 0px 10px hsl(173, 100%, 50%);
+        border-color: hsl(173, 100%, 50%);
+    }
+    60%{
+        box-shadow: 0px 0px 10px hsl(187, 100%, 50%);
+        border-color: hsl(187, 100%, 50%);
+    }
+    70%{
+        box-shadow: 0px 0px 10px hsl(237, 100%, 50%); 
+        border-color: hsl(237, 100%, 50%);
+    }
+    80%{
+        box-shadow: 0px 0px 10px hsl(287, 100%, 50%); 
+        border-color: hsl(287, 100%, 50%);
+    }
+    90%{
+        box-shadow: 0px 0px 10px hsl(329, 100%, 50%); 
+        border-color: hsl(329, 100%, 50%);
+    }
+}
+
+@keyframes glow2{
+    0%, 100%{text-shadow: 0px 0px 10px hsl(0, 100%, 50%);}
+    10%{text-shadow: 0px 0px 10px hsl(0, 100%, 50%);}
+    20%{text-shadow: 0px 0px 10px hsl(22, 100%, 50%);}
+    30%{text-shadow: 0px 0px 10px hsl(58, 100%, 50%);}
+    40%{text-shadow: 0px 0px 10px hsl(92, 100%, 50%);}
+    50%{text-shadow: 0px 0px 10px hsl(173, 100%, 50%);}
+    60%{text-shadow: 0px 0px 10px hsl(187, 100%, 50%);}
+    70%{text-shadow: 0px 0px 10px hsl(237, 100%, 50%);}
+    80%{text-shadow: 0px 0px 10px hsl(287, 100%, 50%);}
+    90%{text-shadow: 0px 0px 10px hsl(329, 100%, 50%);}
+}
+
+@keyframes glowBox{
+    0%, 100%{background-color: hsl(0, 100%, 50%);}
+    10%{background-color: hsl(0, 100%, 50%);}
+    20%{background-color: hsl(22, 100%, 50%);}
+    30%{background-color: hsl(58, 100%, 50%);}
+    40%{background-color: hsl(92, 100%, 50%);}
+    50%{background-color: hsl(173, 100%, 50%);}
+    60%{background-color: hsl(187, 100%, 50%);}
+    70%{background-color: hsl(237, 100%, 50%);}
+    80%{background-color: hsl(287, 100%, 50%);}
+    90%{background-color: hsl(329, 100%, 50%);}
+}
+
+/* Main section */
+
+#players{
+    font-family: verdana, sans-serif;
+    font-size: 1.1em;
+    margin: 10px;
+    color: white;
+}
+
+#players input:checked{
+    accent-color: hsl(134, 90%, 55%);
+}
+
+.preGame{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+#playerInfoPVP{
+    display: none;
+    width: 60%;
+    justify-content: space-evenly;
+    margin-top: 10px;
+    padding: 5px 10px;
+}
+
+#playerInfoPVC{
+    display: none;
+    width: 40%;
+    margin-top: 10px;
+    padding: 5px 10px;
+}
+
+#warning{
+    display: none;
+    flex: 0 1 auto;
+    color: white;
+    font-family: times, verdana;
+    font-size: 1.1em;
+    padding: 10px;
+    background-color: hsl(0, 89%, 50%);
+    border-radius: 10px;
+    font-style: italic;
+}
+
+.playerBox label{
+    margin-right: 10px;
+    font-size: 1.1em;
+    font-family: verdana, sans-serif;
+}
+
+.playerBox input{
+    font-size: 1.1em;
+    font-family: monospace, sans-serif;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.button1{
+    padding: 5px 10px;
+    font-size: 1.3em;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin-top: 10px;
+    background-color:hsl(134, 78%, 42%);
+    transition: background-color 0.25s;
+}
+
+.button1:hover{
+    color: white;
+    box-shadow: 0px 0px 10px black;
+    border-color: white;
+    background-color:hsl(134, 90%, 55%);
+    font-size: 1.5em;
+}
+
+.button1:active{
+    color: hsl(0, 91%, 59%);
+    box-shadow: 0px 0px 10px black;
+    border-color: hsl(0, 91%, 59%);
+    background-color:hsl(198, 90%, 55%);
+    font-size: 1.5em;
+}
+
+/* Display when game starts*/
+table{
+    display: none;
+    color: white;
+    margin-top: 10px;
+}
+
+#gameBoard{
+    display: none
+}
+
+.firstRow{
+    background-color: hsl(134, 100%, 50%);
+    color: black;
+    border: 3px solid black;
+    font-size: 1.2em;
+    border-radius: 10px;
+}
+
+table tr td{
+    font-family: verdana, sans-serif;
+    font-size: 1.1em;
+}
+
+.firstBlock{
+    border-radius: 5px;
+    color: hsl(134, 100%, 50%);
+    font-weight: bold;
+    border: 4px solid hsl(134, 78%, 42%)
+}
+
+#board{
+    margin-top: 20px;
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; 
+    grid-template-rows: 1fr 1fr 1fr; 
+    gap: 15px; /* space between items */
+    text-align: center;
+    width: 300px;
+    height: 300px;
+}
+
+.piece{
+    border: 2px solid hsl(134, 100%, 50%);
+    background-color: black;
+    color: hsl(134, 100%, 50%);
+    font-size: 2em;
+    border-radius: 15px;
+    transition: background-color 0.25s;
+}
+
+.piece:disabled{
+    border-color: black;
+}
+
+.piece:hover:not(:disabled){
+    border: 2px solid black;
+    background-color: hsl(134, 100%, 50%);
+    color: black;
+}
+
+.notice{
+    font-family: times, verdana;
+    font-size: 1.8em;
+    color: hsl(0, 0%, 0%);
+    margin: 0px;
+    animation-name: glow2;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+}
+
+#playerTurn{
+    color: hsl(134, 100%, 50%);
+    font-family: Times, sans-serif;
+}
+
+#restart{
+    display: none;
+    margin-right: 10px;
+}
+
+#quitGame{
+    margin-left: 10px;
+}
+
+/* Footer Section */

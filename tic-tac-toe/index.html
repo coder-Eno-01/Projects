@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="icon" href="https://www.svgrepo.com/show/304353/tictactoe.svg">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome!</h1>
+        <h2>❌&⭕</h2>
+    </header>
+
+    <main>
+        <div id="players">
+            <input type="radio" id="pvp" name="opponent">
+            <label for="pvp">Player vs Player      ....</label>
+            <br>
+            <input type="radio" id="pvc" name="opponent">
+            <label for="pvc">Player vs Computer</label>
+        </div>
+
+        <div id="gameSetUp" class="preGame">
+            <div id="playerInfoPVP">
+                <div class="playerBox">
+                    <label for="player1NamePVP">Player One</label>
+                    <input id="player1NamePVP" type="text" spellcheck="false" autocomplete="off">
+                </div>
+                
+                <div class="playerBox">
+                    <label for="player2Name">Player Two</label>
+                    <input id="player2Name" type="text" spellcheck="false" autocomplete="off">
+                </div>
+            </div>
+
+            <div id="playerInfoPVC">
+                <div class="playerBox">
+                    <label for="player1NamePVC">Player One</label>
+                    <input id="player1NamePVC" type="text" spellcheck="false" autocomplete="off">
+                </div>
+            </div>
+
+            <button id="startGame" class="button1" style="display: none">START</button>
+            <p id="warning"></p>
+        </div>
+
+        <table id="score" align="center">
+            <tr>
+                <th></th>
+                <th class="firstRow" width="325px">Player One</th>
+                <th class="firstRow" width="325px">Player Two</th>
+            </tr>
+
+            <tr>
+                <td class="firstBlock">W</td>
+                <td class="scoreItem">0</td>
+                <td class="scoreItem">0</td>
+            </tr>
+
+            <tr>
+                <td class="firstBlock">D</td>
+                <td colspan="2" class="scoreItem">0</td>
+            </tr>
+
+        </table>
+
+        <div id="gameBoard">
+            <h2 id="playerTurn">Player one's turn</h2>
+            <div id="board">
+                <button class="piece"></button>
+                <button class="piece"></button>
+                <button class="piece"></button>
+                <button class="piece"></button>
+                <button class="piece"></button>
+                <button class="piece"></button>
+                <button class="piece"></button>
+                <button class="piece"></button>
+                <button class="piece"></button>
+            </div>
+            <h3 class="notice">description</h3>
+            <h3 class="notice">notice</h3>
+
+            <button id="restart" class="button1">RESTART</button>
+            <button id="quitGame" class="button1">QUIT</button>
+        </div>
+
+        <!-- Background Deisgn Section -->
+        <div class="designBox" id="topLeft"></div>
+        <div class="designBox" id="middle"></div>
+        <div class="designBox" id="bottomRight"></div>
+    </main>
+    <footer>
+        <h4>&copy; <i>2025 Eno - Project Zero</i></h4>
+    </footer>
+
+    <script src="game.js"></script>
+    <script src="player.js"></script>
+    <script src="board.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
