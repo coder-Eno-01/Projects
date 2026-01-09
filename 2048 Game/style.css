@@ -1,0 +1,239 @@
+body{
+    min-height: 96vh;
+    min-width: 90vw;
+    margin: 0px;
+    background-color: #e0e1dd;
+}
+
+main{
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    margin: 5px;
+    justify-content: center;
+}
+
+footer{
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    display: inline-block;
+    background-color: #0d1b2a;
+    color: #e0e1dd;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 8px;
+}
+
+#scoreBoard{
+    text-align: center;
+    background-color: #0d1b2a;
+    border-radius: 8px;
+    padding: 5px 0px;
+}
+
+#scoreBoard div{
+    display: inline-block;
+    margin: 2px;
+    padding: 10px 25px;
+    text-align: center;
+    background-color: #778da9;
+    border-radius: 10px;
+    font-size: 1.15em;
+    border: 3px solid #e0e1dd;
+}
+
+#scoreBoard h2{
+    margin: 0px;
+    color: #e0e1dd
+}
+
+#scoreBoard h3{
+    margin: 0px;
+    color: white;
+}
+
+#specialButtons{
+    text-align: center;
+    margin-top: 30px;
+}
+
+.describe{
+    visibility: hidden;
+    position: absolute;
+    color: black;
+    background-color: white;
+    padding: 3px 15px;
+    border-radius: 5px;
+    bottom: 120%; /* Position above the button */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.numMoves{
+    margin: 5px;
+}
+
+.SPB{
+    position: relative;
+    font-weight: bold;
+    padding: 12px 10px;
+    background-color: #415a77;
+    color: #e0e1dd;
+    border: 3px solid #0d1b2a;
+    border-radius: 5px;
+    transition: background-color 0.25s;
+}
+
+.SPB:hover{
+    background-color: #1b263b;
+    border-color: white;
+}
+
+.SPB:hover .describe{
+    visibility: visible;
+}
+
+:root{
+    --board-size: 420px;
+    --gap: 15px;
+    --tile-size: 85px;
+}
+
+#board{
+    position: relative;
+
+    width: var(--board-size);
+    height: var(--board-size);
+
+    padding: 0px;
+    background-color: #9caac3;
+    border-radius: 10px;
+    align-self: center;
+    border: 1px black solid;
+    touch-action: none; /* Prevent default touch actions like scrolling */
+}
+
+.piece{
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: var(--tile-size);
+    height: var(--tile-size);
+
+    font-family: times, sans-serif;
+    font-size: 2.3em;
+    color: #0d1b2a;
+    background-color: #dad7cd;
+    border-radius: 10px;
+    border: 1px black solid;
+    margin: 0px;
+    z-index: 2;
+}
+
+.cell{
+    position: absolute;
+
+    width: var(--tile-size);
+    height: var(--tile-size);
+
+    border-radius: 10px;
+    background-color: #8a98b0;
+    border: 1px solid rgba(13, 27, 42, 0.35);
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.15);
+    z-index: 1;
+}
+
+@media (max-width: 600px){
+    :root{
+        --board-size: 92vw;
+        --gap: calc(0.04 * 92vw);
+        --tile-size: calc((92vw - 5 * var(--gap)) / 4);
+    }
+}
+
+#newGame{
+    align-self: center;
+    padding: 10px 10px;
+    border-radius: 8px;
+    border: 3px solid #0d1b2a;
+    background-color: #778da9;
+    color: #0d1b2a;
+    font-weight: bold;
+    transition: font-size 0.25s;
+}
+
+#newGame:hover{
+    background-color: #1b263b;
+    color: white;
+    border-color: white;
+    font-size: 1em;
+}
+
+/* Tile colours */
+.piece[data-value="2"] {
+    background-color: #edf2f8; /* very light */
+    color: #0d1b2a;
+}
+
+.piece[data-value="4"] {
+    background-color: #cfddee; /* noticeably darker */
+    color: #0d1b2a;
+}
+
+.piece[data-value="8"] {
+    background-color: #9fbad9; /* stronger blue */
+    color: #0d1b2a;
+}
+
+.piece[data-value="16"] {
+    background-color: #6f8fb3; 
+    color: #e0e1dd;
+}
+
+.piece[data-value="32"] {
+    background-color: #4f7f8c; /* blue → teal */
+    color: #e0e1dd;
+}
+
+.piece[data-value="64"] {
+    background-color: #2f6f5f; /* green-teal */
+    color: #e0e1dd;
+}
+
+.piece[data-value="128"] {
+    background-color: #3b7f3b; /* green */
+    color: #e0e1dd;
+    font-size: 2.2em;
+}
+
+.piece[data-value="256"] {
+    background-color: #6b6bb3; /* blue-purple */
+    color: #e0e1dd;
+    font-size: 2.2em;
+}
+
+.piece[data-value="512"] {
+    background-color: #563d7c; /* rich purple */
+    color: #e0e1dd;
+    font-size: 2.2em;
+}
+
+.piece[data-value="1024"] {
+    background-color: #1b263b;
+    color: #e0e1dd;
+    font-size: 1.9em;
+}
+
+.piece[data-value="2048"] {
+    background-color: #0d1b2a;
+    color: #ffd700;
+    font-size: 1.9em;
+    font-weight: bolder;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+    border: 2px solid #ffd700;
+}
+

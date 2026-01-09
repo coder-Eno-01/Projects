@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="https://www.svgrepo.com/show/488071/block-toys.svg">
+</head>
+<body>
+    <main>
+        <div id="scoreBoard">
+            <div id="score">
+                <h2>Score</h2>
+                <h3>0</h3>
+            </div>
+
+            <div id="best">
+                <h2>Best</h2>
+                <h3>0</h3>
+            </div>
+        </div>
+
+        <div id="specialButtons">
+            <button id="undo" class="SPB">
+                ⟲
+
+                <span class="describe">Undo move</span>
+                <span class="numMoves">1</span>
+            </button>
+            <button id="delete" class="SPB">
+                🗑️
+
+                <span class="describe">Delete Tile</span>
+                <span class="numMoves">1</span>
+            </button>
+            <button id="switch" class="SPB">
+                ⇄
+            
+                <span class="describe">Swap Tiles</span>
+                <span class="numMoves">1</span>
+            </button>
+        </div>
+
+        <div id="board">
+            <!-- Tiles will be generated here -->
+        </div>
+
+        <button id="newGame">New Game</button>
+    </main>
+
+    <footer>&copy; 2025 Eno - Project 0.1</footer>
+    <script src="tile.js"></script>
+    <script src="tilegrid.js"></script>
+    <script src="util.js"></script>
+    <script src="pushTile.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
