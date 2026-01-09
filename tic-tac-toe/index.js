@@ -40,7 +40,7 @@ players.addEventListener('change', function(e){
         }
         else if (e.target.id === "pvc"){
             document.getElementById("playerInfoPVP").style.display = "none";
-            document.getElementById("playerInfoPVC").style.display = "block";
+            document.getElementById("playerInfoPVC").style.display = "flex";
         }
 
         start.style.display = "inline-block";
