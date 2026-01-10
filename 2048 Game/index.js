@@ -63,9 +63,6 @@ document.addEventListener('keydown', async (e) => {
     else if (mergeAvailable(grid, e.key))
         await gameLogic(e.key, newGrid, true);
 
-    grid.addBlock();
-    populate();
-
     busy = false;
 
     if (checkLost(grid)){
@@ -115,9 +112,6 @@ board.addEventListener('touchend', async (e) => {
         await gameLogic(key, newGrid, true);
     }
 
-    grid.addBlock();
-    populate();
-
     busy = false;
 
     if (checkLost(grid) && specialMoves.outOfMoves()){
@@ -152,6 +146,9 @@ async function gameLogic(key, newGrid, justMerge){
     }
 
     await pause(80);    // Slight pause before new tile spawns for user comfort
+
+    grid.addBlock();
+    populate();
 }
 
 document.addEventListener('click', async (e) => {
