@@ -516,7 +516,7 @@ deleteTile.onclick = function(){
     if (deleting){
         deleting = false;
         deleteTile.style.backgroundColor = colourScheme.second
-        deleteTile.style.backgroundColor = colourScheme.base
+        deleteTile.style.color = colourScheme.base
         undoMove.disabled = false;
         switchTiles.disabled = false;
     }
@@ -559,7 +559,7 @@ switchTiles.onclick = async function(){
     if (switching){
         switching = false;
         switchTiles.style.backgroundColor = colourScheme.second;
-        switchTiles.style.backgroundColor = colourScheme.base;
+        switchTiles.style.color = colourScheme.base;
         blocksToSwitch.forEach(el => el.style.border = '1px black solid')
         undoMove.disabled = false;
         deleteTile.disabled = false;

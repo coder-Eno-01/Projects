@@ -289,10 +289,9 @@ function loadTheme(){
     document.querySelector('body').style.background = colourScheme.base;
 
     //Score Board
-    document.querySelector('#scoreBoard').style.backgroundColor = colourScheme.scoreBoardBackground;
-    // Score board container
     const sb = document.querySelector('#scoreBoard');
     sb.style.backgroundColor = colourScheme.scoreBoardBackground;
+    sb.style.borderColor = colourScheme.scoreBorder;
 
     // Score boxes
     document.querySelectorAll('#scoreBoard div').forEach(box => {
@@ -313,8 +312,9 @@ function loadTheme(){
 
     // Special Buttons
     document.querySelectorAll('.SPB').forEach(button => {
-        button.style.backgroundColor = colourScheme.second
+        button.style.backgroundColor = colourScheme.second;
         button.style.color = colourScheme.base;
+        button.style.borderColor = colourScheme.scoreBorder;
     })
 
     // Board
@@ -332,7 +332,7 @@ function loadTheme(){
 
     // New Game
     newGame.style.backgroundColor = colourScheme.boardBackground
-    newGame.style.borderColor = colourScheme.scoreBoardBackground;
+    newGame.style.borderColor = colourScheme.scoreBorder;
     newGame.style.color = colourScheme.scoreBoardBackground;
 
     // Theme Change
