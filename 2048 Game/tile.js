@@ -29,6 +29,7 @@ class Tile{
             this.element = document.createElement('div');
             this.element.classList.add('piece');
             this.element.dataset.value = this.value;
+            this.element.style.backgroundColor = colourScheme.getTile(this.value);
             this.element.tile = this;
             board.appendChild(this.element)
         }
@@ -60,6 +61,7 @@ class Tile{
     postMerge(){
         this.value *= 2;
         this.element.dataset.value = this.value;
+        this.element.style.backgroundColor = colourScheme.getTile(this.value);
     }
 
     deleteBlock(){

@@ -2,7 +2,6 @@ body{
     min-height: 96vh;
     min-width: 90vw;
     margin: 0px;
-    background-color: #e0e1dd;
 }
 
 main{
@@ -20,14 +19,12 @@ footer{
     display: inline-block;
     background-color: #0d1b2a;
     color: #e0e1dd;
-    color: white;
     padding: 5px 10px;
     border-radius: 8px;
 }
 
 #scoreBoard{
     text-align: center;
-    background-color: #0d1b2a;
     border-radius: 8px;
     padding: 5px 0px;
 }
@@ -79,8 +76,6 @@ footer{
     position: relative;
     font-weight: bold;
     padding: 12px 10px;
-    background-color: #415a77;
-    color: #e0e1dd;
     border: 3px solid #0d1b2a;
     border-radius: 5px;
     transition: background-color 0.25s;
@@ -89,10 +84,6 @@ footer{
 .SPB:hover{
     background-color: #1b263b;
     border-color: white;
-}
-
-.SPB:hover .describe{
-    visibility: visible;
 }
 
 :root{
@@ -159,9 +150,8 @@ footer{
     align-self: center;
     padding: 10px 10px;
     border-radius: 8px;
-    border: 3px solid #0d1b2a;
-    background-color: #778da9;
-    color: #0d1b2a;
+    border-style: solid;
+    border-width: 3px;
     font-weight: bold;
     transition: font-size 0.25s;
 }
@@ -173,67 +163,60 @@ footer{
     font-size: 1em;
 }
 
-/* Tile colours */
-.piece[data-value="2"] {
-    background-color: #edf2f8; /* very light */
-    color: #0d1b2a;
-}
-
-.piece[data-value="4"] {
-    background-color: #cfddee; /* noticeably darker */
-    color: #0d1b2a;
-}
-
-.piece[data-value="8"] {
-    background-color: #9fbad9; /* stronger blue */
-    color: #0d1b2a;
-}
-
-.piece[data-value="16"] {
-    background-color: #6f8fb3; 
-    color: #e0e1dd;
-}
-
-.piece[data-value="32"] {
-    background-color: #4f7f8c; /* blue → teal */
-    color: #e0e1dd;
-}
-
-.piece[data-value="64"] {
-    background-color: #2f6f5f; /* green-teal */
-    color: #e0e1dd;
-}
-
 .piece[data-value="128"] {
-    background-color: #3b7f3b; /* green */
-    color: #e0e1dd;
     font-size: 2.2em;
 }
 
 .piece[data-value="256"] {
-    background-color: #6b6bb3; /* blue-purple */
-    color: #e0e1dd;
     font-size: 2.2em;
 }
 
 .piece[data-value="512"] {
-    background-color: #563d7c; /* rich purple */
-    color: #e0e1dd;
     font-size: 2.2em;
 }
 
 .piece[data-value="1024"] {
-    background-color: #1b263b;
-    color: #e0e1dd;
     font-size: 1.9em;
 }
 
 .piece[data-value="2048"] {
-    background-color: #0d1b2a;
-    color: #ffd700;
     font-size: 1.9em;
     font-weight: bolder;
     box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
-    border: 2px solid #ffd700;
+    border-width: 2px;
+    border-style: solid;
 }
 
+#themes{
+    text-align: center;
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    border-radius: 10px;
+    background-color: #0d1b2a;
+    padding: 5px 5px;
+}
+
+#themes h3{
+    margin: 0px;
+    margin-bottom: 5px;
+    margin-inline: 5px;
+    color: #e0e1dd;
+}
+
+.changeTheme{
+    display: none;
+    text-align: center;
+    border: none;
+    margin: 0px;
+    font-size: 1.8em;
+    background-color: transparent;
+}
+
+#scoreBoard, #board, #themes {
+    transition: background-color 0.25s ease;
+}
+
+.changeTheme:active{
+    /* Nothing must happen */
+}
