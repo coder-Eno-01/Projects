@@ -15,118 +15,151 @@ let specialMoves = {
     increaseSwap(){this.swapMoves++}
 };
 
-const board = document.querySelector('#board'),
-      newGame = document.querySelector('#newGame'),
-      scoreBoard = document.querySelectorAll('#scoreBoard h3'),
-      deleteTile = document.querySelector('#delete'),
-      undoMove = document.querySelector('#undo'),
-      switchTiles = document.querySelector('#switch'),
-      specialFeatures = document.querySelectorAll('.numMoves'),
-      specialButtons = document.querySelectorAll('.SPB');
+const   board = document.querySelector('#board'),
+        newGame = document.querySelector('#newGame'),
+        scoreBoard = document.querySelectorAll('#scoreBoard h3'),
+        deleteTile = document.querySelector('#delete'),
+        undoMove = document.querySelector('#undo'),
+        switchTiles = document.querySelector('#switch'),
+        specialFeatures = document.querySelectorAll('.numMoves'),
+        specialButtons = document.querySelectorAll('.SPB');
 
 const allowed = ["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown"];
 
 const ROW = 4, U = 0, D = 1, S = 2;
-const colours = ['yellow','orange','red','pink','purple','lightblue','blue','lightgreen','green','darkgreen','brown'];
-
+const colours = ['yellow', 'orange', 'red', 'pink', 'purple', 'lightblue', 'blue', 'lightgreen', 'green', 'darkgreen', 'brown'];
 const sizes = {
     tile: 85,
     gap: 15,
     updateTile(newSize){this.tile = newSize},
     updateGap(newGap){this.gap = newGap}
-};
-
+}
 let grid, savedGrids = [], dataCopy = [], blocksToSwitch = [];
-let busy = false, deleting = false, switching = false, rewardGiven = false;
+let busy = false;
+let deleting = false;
+let switching = false;
+let rewardGiven = false;
 
-let touchStartX = 0, touchStartY = 0;
+// Recording where swip starts for mobile support
+let touchStartX = 0;
+let touchStartY = 0;
+
 const previousHighScore = localStorage.getItem('highScore') !== null;
 
-/* ---------------- INPUT HANDLING ---------------- */
+document.addEventListener('keydown', async (e) => {
+    if (busy)
+        return;
 
-document.addEventListener('keydown', async e => {
-    if (busy || !allowed.includes(e.key)) return;
+    if (!allowed.includes(e.key))
+        return;
 
     busy = true;
     let newGrid = push(e.key);
-
-    if (!grid.equals(newGrid)) await gameLogic(e.key, newGrid, false);
-    else if (mergeAvailable(grid, e.key)) await gameLogic(e.key, newGrid, true);
+            
+    if (!grid.equals(newGrid)){
+        await gameLogic(e.key, newGrid, false);
+    }
+    
+    else if (mergeAvailable(grid, e.key))
+        await gameLogic(e.key, newGrid, true);
 
     busy = false;
 
-    if (checkLost(grid) && specialMoves.outOfMoves())
-        alert("Game Over! Start a new game to try again.");
+    if (checkLost(grid)){
+        if (specialMoves.outOfMoves()){
+            window.alert("Game Over! Start a new game to try again.");
+        }
+    }
 });
 
-board.addEventListener('touchstart', e => {
-    const t = e.touches[0];
-    touchStartX = t.clientX;
-    touchStartY = t.clientY;
+board.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    console.log(touch);
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
 });
 
-board.addEventListener('touchend', async e => {
+board.addEventListener('touchend', async (e) => {
     if (busy) return;
 
-    const t = e.changedTouches[0];
-    const dx = t.clientX - touchStartX;
-    const dy = t.clientY - touchStartY;
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - touchStartX;
+    const deltaY = touch.clientY - touchStartY;
 
-    if (Math.max(Math.abs(dx), Math.abs(dy)) < 30) return;
+    const absX = Math.abs(deltaX);
+    const absY = Math.abs(deltaY);
 
-    const key = Math.abs(dx) > Math.abs(dy)
-        ? (dx > 0 ? "ArrowRight" : "ArrowLeft")
-        : (dy > 0 ? "ArrowDown" : "ArrowUp");
+    // Ignoring tiny swipes
+    if (Math.max(absX, absY) < 30) return;
 
+    let key;
+
+    if (absX > absY) {
+        key = deltaX > 0 ? "ArrowRight" : "ArrowLeft";
+    } else {
+        key = deltaY > 0 ? "ArrowDown" : "ArrowUp";
+    }
+
+    // Reusing existing keyboard logic
     busy = true;
+
     let newGrid = push(key);
 
-    if (!grid.equals(newGrid)) await gameLogic(key, newGrid, false);
-    else if (mergeAvailable(grid, key)) await gameLogic(key, newGrid, true);
+    if (!grid.equals(newGrid)){
+        await gameLogic(key, newGrid, false);
+    }
+    else if (mergeAvailable(grid, key)){
+        await gameLogic(key, newGrid, true);
+    }
 
     busy = false;
 
-    if (checkLost(grid) && specialMoves.outOfMoves())
+    if (checkLost(grid) && specialMoves.outOfMoves()){
         alert("Game Over! Start a new game to try again.");
+    }
 });
 
-/* ---------------- GAME LOGIC ---------------- */
-
 async function gameLogic(key, newGrid, justMerge){
-    preserveData();
-    grid = new TileGrid(newGrid);
-    updateTargets(grid, newGrid);
+    preserveData();      // Saving data for possible undo
+
+    grid = new TileGrid(newGrid);           // To ensure that the grids are exactly the same
+    updateTargets(grid, newGrid);           // We update the coordinates of the tiles in newGrid but set these new coordinates as targets for the tiles in grid
 
     if (!justMerge){
-        await slide();
+        await slide()
         grid.updateCoords();
     }
 
     prepareForMerge(grid, key);
+
     await merge();
 
+    // Handling compression post-merge
     newGrid = push(key);
+            
     if (!grid.equals(newGrid)){
         grid = new TileGrid(newGrid);
         updateTargets(grid, newGrid);
+
         await slide();
         grid.updateCoords();
     }
 
-    await pause(80);
+    await pause(80);    // Slight pause before new tile spawns for user comfort
+
     grid.addBlock();
     tileColours();
     populate();
 }
 
-/* ---------------- TILE INTERACTION ---------------- */
-
-document.addEventListener('click', async e => {
+document.addEventListener('click', async (e) => {
     const element = e.target.closest('.piece');
+
     if (!element) return;
 
     if (deleting){
         preserveData();
+        
         await tileDeletion(element);
 
         deleting = false;
@@ -134,136 +167,416 @@ document.addEventListener('click', async e => {
         updateSpecialMoves();
         specialMoveAnimation(D);
 
+        // After handling the visual delete, we're removing it from the grid.
         element.tile.deleteBlock();
-        grid.deleteTile(...element.tile.position());
+        grid.deleteTile(...element.tile.position())
 
         undoMove.disabled = false;
         switchTiles.disabled = false;
-        deleteTile.style.backgroundColor = colourScheme.second;
-        deleteTile.style.color = colourScheme.base;
+        deleteTile.style.backgroundColor = colourScheme.second
+        deleteTile.style.backgroundColor = colourScheme.base
     }
 
     else if (switching){
-        if (blocksToSwitch.includes(element)){
-            element.style.border = '1px black solid';
-            blocksToSwitch = [];
-            return;
-        }
 
-        blocksToSwitch.push(element);
-        element.style.border = `3px solid ${colourScheme.accent ?? colourScheme.second}`;
+        if (blocksToSwitch.length < 2){
+            if (blocksToSwitch.includes(element)){      // It's the same tile being clicked again
+                element.style.border = '1px black solid';
+                blocksToSwitch = [];
+                return;
+            }
 
-        if (blocksToSwitch.length === 2){
-            preserveData();
+            blocksToSwitch.push(element);
+            element.style.border = `3px solid ${colours[Math.floor(Math.random() * colours.length)]}`;
 
-            const [a,b] = blocksToSwitch.map(el => el.tile);
-            grid.set(a, b.position());
-            grid.set(b, a.position());
-            grid.updateCoords();
+            
+            if (blocksToSwitch.length === 2){
+                preserveData();
 
-            await switchAnimation(...blocksToSwitch);
+                // Swapping the two tiles in the grid prior to animating.
+                const tileA = blocksToSwitch[0].tile;
+                const posA = tileA.position();
+                const tileB = blocksToSwitch[1].tile;
+                const posB = tileB.position();
 
-            blocksToSwitch.forEach(el => el.style.border = '1px black solid');
-            switching = false;
-            specialMoves.decreaseSwap();
-            updateSpecialMoves();
-            specialMoveAnimation(S);
+                grid.set(tileA, posB);
+                grid.set(tileB, posA);
+                grid.updateCoords();
+                // **************************
 
-            switchTiles.style.backgroundColor = colourScheme.second;
-            switchTiles.style.color = colourScheme.base;
-            undoMove.disabled = false;
-            deleteTile.disabled = false;
-            blocksToSwitch = [];
+                await switchAnimation(...blocksToSwitch);
+
+                blocksToSwitch.forEach(el => el.style.border = '1px black solid');          // Reset coz clicking changed border size and colour
+                switching = false;
+                specialMoves.decreaseSwap();
+                updateSpecialMoves();
+                specialMoveAnimation(S);
+
+                switchTiles.style.backgroundColor = colourScheme.second
+                switchTiles.style.backgroundColor = colourScheme.base
+                undoMove.disabled = false;
+                deleteTile.disabled = false;
+                blocksToSwitch = [];
+            }
         }
     }
 
     loadTheme();
-});
+})
 
-/* ---------------- ANIMATIONS ---------------- */
+function start(){
+    grid = new TileGrid();
+    grid.addBlock(); grid.addBlock();
+    updateScore(null);
+    backgroundTiles();
+    populate();
+}
+
+function gameOver(){
+    if (!checkLost(grid))
+        return false;
+
+    return true;
+}
+
+function populate(){
+    for(let tile of grid.getTiles()){
+        place(tile.element, tile.position());
+        tile.element.textContent = `${tile.value}`
+    }
+}
+
+function layoutSizes(){
+    const boardSize = board.clientWidth;
+    const gap = boardSize * 0.04;
+    const tileSize = (boardSize - 5 * gap) / 4;
+    sizes.updateGap(gap);
+    sizes.updateTile(tileSize);
+}
+
+function backgroundTiles(){
+    layoutSizes();
+
+    for (let row = 0; row < ROW; row++){
+        for (let col = 0; col < ROW; col++){
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.style.backgroundColor = colourScheme.cells
+
+            const top  = row * (sizes.tile + sizes.gap) + sizes.gap;
+            const left = col * (sizes.tile + sizes.gap) + sizes.gap;
+
+            cell.style.top  = `${top}px`;
+            cell.style.left = `${left}px`;
+
+            board.appendChild(cell);
+        }
+    }
+}
+
+function preserveData(){
+    savedGrids.push(new TileGrid(grid));
+    dataCopy.push({
+        score: score[0], 
+        deletes: specialMoves.deletes(), 
+        swaps: specialMoves.swaps(),
+        undos: specialMoves.undos()
+    });
+
+    if (savedGrids.length > 5){
+        savedGrids.splice(0, 1);
+        dataCopy.splice(0, 1);
+    }
+}
+
+function push(key){
+    switch(key){
+        case 'ArrowLeft': return pushLeft(grid);
+        case 'ArrowRight': return pushRight(grid);
+        case 'ArrowUp': return pushUp(grid);
+        case 'ArrowDown': return pushDown(grid);
+    }
+}
+
+function updateScore(value){
+    if (value != null){
+        score[0] += value;
+        scoreBoard[0].textContent = score[0];
+
+        switch(value){
+            case 256:
+                specialMoves.increaseSwap();
+                updateSpecialMoves();
+                specialMoveAnimation(S);
+                break;
+            case 512:
+                specialMoves.increaseDelete();
+                updateSpecialMoves();
+                specialMoveAnimation(D);
+                break;
+            case 1024:
+                if (specialMoves.undos() < 5){
+                    specialMoves.increaseUndo();
+                    updateSpecialMoves();
+                    specialMoveAnimation(U);
+                }
+
+                break;
+        }
+        
+        if (score[0] > score[1]){
+            if (!rewardGiven && previousHighScore){
+                specialMoves.increaseUndo();
+                specialMoves.increaseDelete();
+                specialMoves.increaseSwap();
+                rewardGiven = true;
+                updateSpecialMoves();
+                specialMoveAnimation(null, true);
+            }
+
+            score[1] = score[0];
+            localStorage.setItem('highScore', score[1]);
+            scoreBoard[1].textContent = score[1];
+        }
+    }
+
+    else{
+        const savedScore = localStorage.getItem('highScore');
+        score[1] = (savedScore !== null) ? Number(savedScore):0;
+        scoreBoard[0].textContent = score[0];
+        scoreBoard[1].textContent = score[1];
+    }
+}
+
+function updateSpecialMoves(){
+    specialFeatures[0].textContent = specialMoves.undos();
+    specialFeatures[1].textContent = specialMoves.deletes();
+    specialFeatures[2].textContent = specialMoves.swaps();
+}
+
+function clearBoard(){
+    board.replaceChildren();
+}
+
+async function slide(){
+    const animations = []; 
+
+    for (let tile of grid.getTiles()){
+        const currentPos = convertToPosition(...tile.position());
+        const newPos = convertToPosition(...tile.newPosition());
+        
+        animations.push(tile.element.animate(
+            [   {top: `${currentPos[0]}px`, left: `${currentPos[1]}px`},
+                {top: `${newPos[0]}px`, left: `${newPos[1]}px`}
+            ], 
+            {   duration: 120,
+                fill: 'forwards'
+            }
+        ).finished);        // animate() returns an animation object which has the finished property that is a Promise
+    }
+
+    await Promise.all(animations)       // Ensuring all Promises are finished before proceeding (All start simultaneously)
+}
 
 async function merge(){
     const animations = [];
 
     for (let tile of grid.getTiles()){
-        if (!tile.isMerging()) continue;
+        if (tile.isMerging()){
 
-        const accent = colourScheme.accent ?? colourScheme.second;
+            if (tile.isDonating()){         // As in this is the moving tile, that will disappear after the merge
+                const currentPos = convertToPosition(...tile.position());
+                const newPos = convertToPosition(...tile.mergeInfo.partner.position());
 
-        if (tile.isDonating()){
-            const cur = convertToPosition(...tile.position());
-            const nxt = convertToPosition(...tile.mergeInfo.partner.position());
+                animations.push(tile.element.animate(
+                    [   {top: `${currentPos[0]}px`, left: `${currentPos[1]}px`, backgroundColor: 'white'},
+                        {top: `${newPos[0]}px`, left: `${newPos[1]}px`, opacity: 0, transform: 'scale(1.2)'}
+                    ],
+                    {   duration: 80,
+                        fill: "forwards"
+                    }
+                ).finished)
+            }
 
-            animations.push(tile.element.animate(
-                [
-                    {top:`${cur[0]}px`,left:`${cur[1]}px`,backgroundColor:accent},
-                    {top:`${nxt[0]}px`,left:`${nxt[1]}px`,opacity:0,transform:'scale(1.2)'}
-                ],
-                {duration:80,fill:'forwards'}
-            ).finished);
-        }
-        else{
-            tile.postMerge();
-            updateScore(tile.value);
+            else{
+                tile.postMerge();
+                updateScore(tile.value);
 
-            animations.push(tile.element.animate(
-                [{transform:'scale(1.2)',backgroundColor:accent}],
-                {duration:80}
-            ).finished);
+                animations.push(tile.element.animate(
+                    [   {transform: `scale(1.2)`, backgroundColor: 'white'}],
+                    {   duration: 80,
+                    }
+                ).finished)
+            }
         }
     }
 
-    await Promise.all(animations);
+    await Promise.all(animations)
     grid.updateMergeInfo();
 }
 
-function specialMoveAnimation(idx, all=false){
-    const accent = colourScheme.accent ?? colourScheme.second;
-
-    const animate = btn => btn.animate(
+async function undoAnimation(){
+    await board.animate(
         [
-            {transform:'scale(1)'},
-            {transform:'scale(1.2)',backgroundColor:accent},
-            {transform:'scale(1)',backgroundColor:colourScheme.second}
+            { transform: 'scale(1)' },
+            { transform: 'scale(0.96)' },
+            { transform: 'scale(1)' }
         ],
-        {duration:400,easing:'ease-in-out'}
-    );
-
-    if (!all) animate(specialButtons[idx]);
-    else specialButtons.forEach(animate);
+        {
+            duration: 300,
+            easing: 'ease-out'
+        }
+    ).finished
 }
 
-/* ---------------- BUTTON STATES ---------------- */
+async function pause(ms){
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-deleteTile.onclick = () => {
-    if (!specialMoves.deletes()) return;
+async function tileDeletion(element){
 
-    deleting = !deleting;
-    deleteTile.style.backgroundColor = deleting
-        ? (colourScheme.accent ?? colourScheme.second)
-        : colourScheme.second;
-    deleteTile.style.color = colourScheme.base;
+    await element.animate(
+        [
+            {backgroundColor: `hsl(0, 93%, 48%)`},
+            {backgroundColor: `hsl(37, 93%, 48%)`},
+            {backgroundColor: `hsl(53, 93%, 48%)`},
+            {transform: 'scale(0) rotate(360deg)', backgroundColor: 'hsl(101, 93%, 48%)'}
+        ],
+        {
+            duration: 1000,
+            fill: 'forwards',
+            easing: 'ease-in-out'
+        }
+    ).finished;
+}
 
-    undoMove.disabled = deleting;
-    switchTiles.disabled = deleting;
-};
+async function switchAnimation(elementA, elementB){
+    const posA = convertToPosition(...elementA.tile.position());
+    const posB = convertToPosition(...elementB.tile.position());
 
-switchTiles.onclick = () => {
-    if (!specialMoves.swaps()) return;
+    const animationA = elementA.animate(
+        [
+            {top: `${posA[0]}px`, left: `${posA[1]}px`}     // Coz the tiles have already swapped positions in the grid, so we're just updating this visually.
+        ],
+        {
+            duration: 500,
+            fill: 'forwards',
+            easing: 'ease-in-out'
+        }
+    ).finished;
+    const animationB = elementB.animate(
+        [
+            {top: `${posB[0]}px`, left: `${posB[1]}px`}
+        ],
+        {
+            duration: 500,
+            fill: 'forwards',
+            easing: 'ease-in-out'
+        }
+    ).finished;
 
-    switching = !switching;
-    switchTiles.style.backgroundColor = switching
-        ? (colourScheme.accent ?? colourScheme.second)
-        : colourScheme.second;
-    switchTiles.style.color = colourScheme.base;
+    await Promise.all([animationA, animationB]);
+}
 
-    undoMove.disabled = switching;
-    deleteTile.disabled = switching;
-};
+function specialMoveAnimation(idx, all = false){
+    if (!all){
+        specialButtons[idx].animate(
+            [
+                {transform: 'scale(1)'},
+                {transform: 'scale(1.2)', backgroundColor: `${colours[Math.floor(Math.random() * colours.length)]}`},
+                {transform: 'scale(1)', backgroundColor: '#415a77'}
+            ],
+            {
+                duration: 400,
+                easing: 'ease-in-out'
+            }
+        );
+    }
 
-/* ---------------- START ---------------- */
+    else{
+        specialButtons.forEach((button) => {
+            button.animate(
+                [
+                {transform: 'scale(1)'},
+                {transform: 'scale(2)', backgroundColor: `${colours[Math.floor(Math.random() * colours.length)]}`},
+                {transform: 'scale(1)', backgroundColor: '#415a77'}
+                ],
+                {
+                    duration: 400,
+                    easing: 'ease-in-out'
+                }
+            )
+        })
+    }
+}
 
-newGame.onclick = () => location.reload();
+deleteTile.onclick = function(){
+    if (specialMoves.deletes() === 0) return;
 
-start();
+    if (deleting){
+        deleting = false;
+        deleteTile.style.backgroundColor = colourScheme.second
+        deleteTile.style.backgroundColor = colourScheme.base
+        undoMove.disabled = false;
+        switchTiles.disabled = false;
+    }
+
+    else{
+        deleting = true;
+        deleteTile.style.backgroundColor = 'hsla(163, 87%, 44%, 1.00)';
+        deleteTile.style.color = 'black'
+        undoMove.disabled = true;
+        switchTiles.disabled = true;
+    }
+}
+
+undoMove.onclick = async function(){
+    if (specialMoves.undos() == 0 || savedGrids.length == 0) return;
+
+    grid = new TileGrid(savedGrids.pop());
+    grid.renderBlocks();
+    const data = dataCopy.pop();
+
+    score[0] = data.score;
+    clearBoard();
+
+    await undoAnimation();
+    
+    specialMoves.deleteMoves = data.deletes;
+    specialMoves.swapMoves = data.swaps;
+    specialMoves.undoMoves = data.undos;
+    specialMoves.decreaseUndo();
+    populate();
+    backgroundTiles();
+    updateSpecialMoves();
+    specialMoveAnimation(U);
+    loadTheme();
+}
+
+switchTiles.onclick = async function(){
+    if (specialMoves.swaps() === 0) return;
+
+    if (switching){
+        switching = false;
+        switchTiles.style.backgroundColor = colourScheme.second;
+        switchTiles.style.backgroundColor = colourScheme.base;
+        blocksToSwitch.forEach(el => el.style.border = '1px black solid')
+        undoMove.disabled = false;
+        deleteTile.disabled = false;
+    }
+
+    else{
+        switching = true;
+        switchTiles.style.backgroundColor = 'hsla(163, 87%, 44%, 1.00)';
+        switchTiles.style.color = 'black'
+        undoMove.disabled = true;
+        deleteTile.disabled = true;
+    }
+}
+
+newGame.onclick = () => {
+    location.reload();
+}
+
 renderTheme();
+start();

@@ -342,9 +342,12 @@ function loadTheme(){
     changeTheme[1].style.color = colourScheme.base;
 
     // Footer 
-    const footer = document.querySelector('footer')
+    const footer = document.querySelector('footer');
+    footer.style.backgroundColor = colourScheme.third;
     footer.style.color = colourScheme.base;
-    footer.style.backgroundColor = colourScheme.scoreBoardBackground;
+    footer.style.borderTop = `1px solid ${colourScheme.second}`;
+    footer.style.boxShadow = `0 -4px 12px rgba(0,0,0,0.35)`;
+
 }
 
 function tileColours(){
