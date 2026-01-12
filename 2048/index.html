@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="https://www.svgrepo.com/show/488071/block-toys.svg">
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7CD43P2V7K"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-7CD43P2V7K');
+</script>
+
+<body>
+    <main>
+        <div id="scoreBoard">
+            <div id="score">
+                <h2>Score</h2>
+                <h3>0</h3>
+            </div>
+
+            <div id="best">
+                <h2>Best</h2>
+                <h3>0</h3>
+            </div>
+        </div>
+
+        <div id="specialButtons">
+            <button id="undo" class="SPB">
+                ⟲
+                <span class="numMoves">1</span>
+            </button>
+            <button id="delete" class="SPB">
+                🗑️
+                <span class="numMoves">1</span>
+            </button>
+            <button id="switch" class="SPB">
+                ⇄
+                <span class="numMoves">1</span>
+            </button>
+        </div>
+
+        <div id="board">
+            <!-- Tiles will be generated here -->
+        </div>
+
+        <button id="newGame">New Game</button>
+    </main>
+
+    <div id="themes">
+        <h3>Themes</h3>
+        <button class="changeTheme">◀</button>
+        <button class="changeTheme">▶</button>
+    </div>
+
+    <button id="leaderboard">
+        🏆
+    </button>
+
+    <div id="LeaderBoard" class="hidden">
+        <div id="leadingPlayer">
+            <img id="rankIcon" src="https://www.svgrepo.com/show/513650/diamond.svg" alt="diamond rank">
+            <div id="playerIcon">
+                <img src="https://www.svgrepo.com/show/453446/account.svg" alt="Player Icon">
+            </div>
+            <h4>Leading Player</h4>
+            <h2>35 000</h2>
+            <h5>2 days</h5>
+        </div>
+        <div class="leader">
+            <img class="rank" src="https://www.svgrepo.com/show/452215/gold-medal.svg" alt="gold rank">
+            <div class="player">Second Name</div>
+            <div class="score">28 000</div>
+        </div>
+        <div class="leader">
+            <img class="rank" src="https://www.svgrepo.com/show/452101/silver-medal.svg" alt="silver rank">
+            <div class="player">Third Name</div>
+            <div class="score">26 724</div>
+        </div>
+        <div class="leader">
+            <img class="rank" src="https://www.svgrepo.com/show/452174/bronze-medal.svg" alt="bronze rank">
+            <div class="player">Fourth Name</div>
+            <div class="score">15 444</div>
+        </div>
+        <div class="leader">
+            <img class="rank" src="https://www.svgrepo.com/show/513229/medal.svg" alt="neutral medal">
+            <div class="player">Fifth Name</div>
+            <div class="score">7 822</div>
+        </div>
+    </div>
+
+    <footer>&copy; 2025 Eno - Project 0.1</footer>
+    <script src="tile.js"></script>
+    <script src="tilegrid.js"></script>
+    <script src="util.js"></script>
+    <script src="pushTile.js"></script>
+    <script src="themes.js"></script>
+    <script src="leaderboard.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
