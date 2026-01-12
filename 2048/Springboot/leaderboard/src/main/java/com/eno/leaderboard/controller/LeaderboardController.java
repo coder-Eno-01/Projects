@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController     // Tells Spring that this class handles HTTP requests and returns JSON
 @RequestMapping("/api/scores")          // Base URL for everything in this controller
 public class LeaderboardController {
