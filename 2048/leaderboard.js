@@ -1,5 +1,6 @@
 const lboardButton = document.querySelector('#leaderboard');
 const lboard = document.querySelector('#LeaderBoard');
+const API_BASE = "https://leaderboard-backend-m25r.onrender.com/api/scores";
 let hideLboard = true;
 
 function leaderboard(){
@@ -33,3 +34,26 @@ lboardButton.onclick = function(){
         hideLboard = true;
     }
 }
+
+async function fetchTopScores() {
+    const response = await fetch(`${API_BASE}/top`);
+    return response.json();
+}
+
+async function submitScore(playerName, score) {
+    const response = await fetch(API_BASE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            playerName,
+            score,
+            clientUid: CLIENT_UID
+        })
+
+    });
+
+    return response.json();
+}
+
+window.fetchTopScores = fetchTopScores;
+window.submitScore = submitScore;

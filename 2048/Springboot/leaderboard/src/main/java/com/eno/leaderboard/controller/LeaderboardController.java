@@ -18,11 +18,30 @@ public class LeaderboardController {
 
     @PostMapping
     public LeaderboardEntry submitScore(@RequestBody LeaderboardEntry entry) {
-        return repository.save(entry);
+
+        // 1. Reject invalid clients
+        if (entry.getClientUid() == null || entry.getClientUid().isBlank()) {
+            throw new IllegalArgumentException("clientUid is required");
+        }
+
+        // 2. Check if this client already exists
+        return repository.findByClientUid(entry.getClientUid())
+                .map(existing -> {
+                    // 3. Update only if new score is higher
+                    if (entry.getScore() > existing.getScore()) {
+                        existing.setScore(entry.getScore());
+                        existing.setPlayerName(entry.getPlayerName());
+                        return repository.save(existing);
+                    }
+                    // Otherwise keep old score
+                    return existing;
+                })
+                // 4. First time submission
+                .orElseGet(() -> repository.save(entry));
     }
 
-    @GetMapping("/top")
+        @GetMapping("/top")
     public List<LeaderboardEntry> getTopScores() {
-        return repository.findTop5ByOrderByScoreDescCreatedAtAsc();
+        return repository.findTop5ByClientUidNotNullOrderByScoreDescCreatedAtAsc();
     }
 }

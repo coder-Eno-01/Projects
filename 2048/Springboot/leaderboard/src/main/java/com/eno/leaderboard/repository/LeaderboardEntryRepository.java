@@ -8,5 +8,5 @@ import java.util.List;
 public interface LeaderboardEntryRepository
         extends JpaRepository<LeaderboardEntry, Long> {
 
-    List<LeaderboardEntry> findTop5ByOrderByScoreDescCreatedAtAsc();
+    List<LeaderboardEntry> findTop5ByClientUidNotNullOrderByScoreDescCreatedAtAsc();
 }
