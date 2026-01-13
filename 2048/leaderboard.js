@@ -6,7 +6,7 @@ let hideLboard = true;
 function leaderboard(){
     const themesSize = document.querySelector('#themes').clientWidth;
 
-    lboardButton.style.left = `${themesSize + 13}px`;
+    lboardButton.style.left = `${themesSize + 10}px`;
 }
 
 lboardButton.onclick = async function(){

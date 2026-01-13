@@ -154,6 +154,7 @@ async function gameLogic(key, newGrid, justMerge){
                 }
             }
 
+            window.alert("Game Over! Start a new game to try again.");
         }
     }
 }
@@ -601,8 +602,22 @@ function getClientUID() {
 
     return uid;
 }
+
+function syncHighScore(){
+    if (!playerName) return;
+
+    const localHigh = Number(localStorage.getItem('highScore')) || 0;
+
+    if (localHigh > lastSubmittedScore){
+        submitScore(playerName, localHigh);
+        lastSubmittedScore = localHigh;
+        localStorage.setItem('lastSubmittedScore', localHigh);
+    }
+}
+
 const CLIENT_UID = getClientUID();
 
 renderTheme();
 start();
 leaderboard();
+syncHighScore();
