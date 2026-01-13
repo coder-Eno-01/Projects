@@ -153,7 +153,7 @@ async function gameLogic(key, newGrid, justMerge){
 
                 if (playerName !== null){
                     localStorage.setItem('playerName', playerName);
-                    await submitScore(playerName, score[1]);
+                    await submitScore(playerName, localStorage.getItem('highScore'));
                     window.alert("You can now check global scores!\nClick Leaderboard button at the bottom");
                 }
             }
