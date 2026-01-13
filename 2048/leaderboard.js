@@ -22,7 +22,7 @@ lboardButton.onclick = async function(){
         if (playerName === null || playerName === "") return;
 
         localStorage.setItem('playerName', playerName);
-        await submitScore(playerName, score[1]);
+        await submitScore(playerName, localStorage.getItem('highScore'));
     }
 
     if(hideLboard){
