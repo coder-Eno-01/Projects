@@ -15,14 +15,20 @@ function leaderboard(){
     lboard.classList.add('hidden');
 }
 
-lboardButton.onclick = function(){
+lboardButton.onclick = async function(){
     if (playerName === null){
         playerName = window.prompt("You need a player name to go global!\nEnter name:");
 
         if (playerName === null || playerName === "") return;
+
+        localStorage.setItem('playerName', playerName);
+        await submitScore(playerName, score[1]);
     }
 
     if(hideLboard){
+        const scores = await fetchTopScores();
+        populateLeaderboard(scores);
+
         lboardButton.style.backgroundColor = 'hsla(163, 87%, 44%, 1.00)';
         lboard.classList.remove('hidden');
         hideLboard = false;
@@ -55,5 +61,48 @@ async function submitScore(playerName, score) {
     return response.json();
 }
 
-window.fetchTopScores = fetchTopScores;
-window.submitScore = submitScore;
+function populateLeaderboard(scores) {
+    if (!scores || scores.length === 0) return;
+
+    // ===== Leading player =====
+    const leading = scores[0];
+
+    const leadingName = document.querySelector('#leadingPlayer h4');
+    const leadingScore = document.querySelector("#leadingPlayer h2");
+    const leadingTime = document.querySelector("#leadingPlayer h5");
+
+    leadingName.textContent = leading.playerName;
+    leadingScore.textContent = leading.score;
+
+    const createdDate = new Date(leading.createdAt);
+    const now = new Date();
+
+    // difference in milliseconds
+    const diffMs = now - createdDate;
+
+    // convert to days
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    leadingTime.textContent =
+        days === 0 ? "Today" :
+        days === 1 ? "1 day ago" :
+        `${days} days ago`;
+
+
+    // ===== Other leaders =====
+    const leaders = document.querySelectorAll(".leader");
+
+    leaders.forEach((row, index) => {
+        const entry = scores[index + 1];
+
+        if (!entry) {
+            row.style.display = "none";
+            return;
+        }
+
+        row.style.display = "flex";
+        row.querySelector(".player").textContent = entry.playerName;
+        row.querySelector(".score").textContent = entry.score;
+    });
+}
+

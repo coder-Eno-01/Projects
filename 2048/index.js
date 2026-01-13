@@ -65,12 +65,6 @@ document.addEventListener('keydown', async (e) => {
         await gameLogic(e.key, newGrid, true);
 
     busy = false;
-
-    if (checkLost(grid)){
-        if (specialMoves.outOfMoves()){
-            window.alert("Game Over! Start a new game to try again.");
-        }
-    }
 });
 
 board.addEventListener('touchstart', (e) => {
@@ -151,6 +145,21 @@ async function gameLogic(key, newGrid, justMerge){
     grid.addBlock();
     tileColours();
     populate();
+
+    if (checkLost(grid)){
+        if (specialMoves.outOfMoves()){
+            if (playerName === null){
+                playerName = window.prompt("Game Over! Enter a username if you wanna check if your score is global level");
+
+                if (playerName !== null){
+                    localStorage.setItem('playerName', playerName);
+                    await submitScore(playerName, score[1]);
+                    window.alert("You can now check global scores!\nClick Leaderboard button at the bottom");
+                }
+            }
+
+        }
+    }
 }
 
 document.addEventListener('click', async (e) => {
