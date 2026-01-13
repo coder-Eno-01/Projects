@@ -1,6 +1,7 @@
 const storedTheme = localStorage.getItem('theme');
 let currentTheme = storedTheme !== null ? Number(storedTheme) : 0;
 const changeTheme = document.querySelectorAll('.changeTheme');
+const loadingDiv = document.querySelector('#loading');
 let colourScheme;
 
 function renderTheme(){
@@ -361,6 +362,12 @@ function loadTheme(){
 
     const player = document.querySelector('#leadingPlayer');
     player.style.border = `2px solid ${colourScheme.scoreBoxes}`;
+
+    // Loading
+    loadingDiv.style.backgroundColor = colourScheme.base;
+    document.querySelector('.loader').style.borderTopColor = colourScheme.second;
+    document.querySelector('#loading h3').style.color = colourScheme.third;
+    document.querySelector('#loading h5').style.color = colourScheme.second;
 }
 
 function tileColours(){

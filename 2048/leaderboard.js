@@ -6,13 +6,7 @@ let hideLboard = true;
 function leaderboard(){
     const themesSize = document.querySelector('#themes').clientWidth;
 
-    lboardButton.style.left = `${themesSize + 15}px`
-
-    lboard.classList.remove('hidden');
-    const lh = lboard.clientHeight;
-    const wh = window.innerHeight;
-    lboard.style.top = `${0.5 * (wh - lh)}px`
-    lboard.classList.add('hidden');
+    lboardButton.style.left = `${themesSize + 13}px`;
 }
 
 lboardButton.onclick = async function(){
@@ -26,7 +20,9 @@ lboardButton.onclick = async function(){
     }
 
     if(hideLboard){
+        loadingDiv.classList.remove('hidden');
         const scores = await fetchTopScores();
+        loadingDiv.classList.add('hidden');
         populateLeaderboard(scores);
 
         lboardButton.style.backgroundColor = 'hsla(163, 87%, 44%, 1.00)';
