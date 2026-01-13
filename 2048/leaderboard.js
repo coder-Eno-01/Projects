@@ -16,7 +16,6 @@ lboardButton.onclick = async function(){
         if (playerName === null || playerName === "") return;
 
         localStorage.setItem('playerName', playerName);
-        await submitScore(playerName, localStorage.getItem('highScore'));
     }
 
     if(hideLboard){
@@ -67,7 +66,8 @@ function populateLeaderboard(scores) {
     const leadingScore = document.querySelector("#leadingPlayer h2");
     const leadingTime = document.querySelector("#leadingPlayer h5");
 
-    leadingName.textContent = leading.playerName;
+    leadingName.textContent = leading.playerName === playerName ? `${leading.playerName} (You)`: leading.playerName;
+
     leadingScore.textContent = leading.score;
 
     const createdDate = new Date(leading.createdAt);
@@ -97,7 +97,7 @@ function populateLeaderboard(scores) {
         }
 
         row.style.display = "flex";
-        row.querySelector(".player").textContent = entry.playerName;
+        row.querySelector(".player").textContent = entry.playerName === playerName ? `${entry.playerName} (You)` : entry.playerName;
         row.querySelector(".score").textContent = entry.score;
     });
 }

@@ -46,6 +46,7 @@ let touchStartY = 0;
 
 const previousHighScore = localStorage.getItem('highScore') !== null;
 let playerName = localStorage.getItem('playerName');      // Could be null...
+let lastSubmittedScore = Number(localStorage.getItem('lastSubmittedScore')) || 0;
 
 document.addEventListener('keydown', async (e) => {
     if (busy)
@@ -108,10 +109,6 @@ board.addEventListener('touchend', async (e) => {
     }
 
     busy = false;
-
-    if (checkLost(grid) && specialMoves.outOfMoves()){
-        alert("Game Over! Start a new game to try again.");
-    }
 });
 
 async function gameLogic(key, newGrid, justMerge){
@@ -153,7 +150,6 @@ async function gameLogic(key, newGrid, justMerge){
 
                 if (playerName !== null){
                     localStorage.setItem('playerName', playerName);
-                    await submitScore(playerName, localStorage.getItem('highScore'));
                     window.alert("You can now check global scores!\nClick Leaderboard button at the bottom");
                 }
             }
@@ -347,6 +343,13 @@ function updateScore(value){
             score[1] = score[0];
             localStorage.setItem('highScore', score[1]);
             scoreBoard[1].textContent = score[1];
+
+            // Submitting score once per new high score
+            if (playerName && score[1] > lastSubmittedScore){
+                submitScore(playerName, score[1]);
+                lastSubmittedScore = score[1];
+                localStorage.setItem('lastSubmittedScore', score[1]);
+            }
         }
     }
 
