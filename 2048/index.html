@@ -8,14 +8,6 @@
     <link rel="icon" href="https://www.svgrepo.com/show/488071/block-toys.svg">
 </head>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-7CD43P2V7K"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-7CD43P2V7K');
 </script>
 
 <body>
@@ -67,7 +59,7 @@
     <div id="loading" class="hidden">
         <div class="loader"></div>
         <h3>Retrieving scores from database</h3>
-        <h5>(First time fetches sometimes take up to ~50s)</h5>
+        <h5>(Fetches may take up to ~50s)</h5>
     </div>
 
     <div id="LeaderBoard" class="hidden">
@@ -99,6 +91,15 @@
             <img class="rank" src="https://www.svgrepo.com/show/513229/medal.svg" alt="neutral medal">
             <div class="player"></div>
             <div class="score"></div>
+        </div>
+    </div>
+
+    <div id="gameOver" class="hidden">
+        <img src="https://i.pinimg.com/736x/cc/32/3c/cc323c2340cda6609b0820040b73ed63.jpg">
+        <div>
+            <button id="restart"><h4 class="GO">Restart</h4></button>
+            <button id="checkLeaderboard"><h4 class="GO">Leaderboard</h4></button>
+            <button id="savour"><h6 class="GO"><i>Savour Effort</i></h6></button>
         </div>
     </div>
 

@@ -6,7 +6,7 @@ let hideLboard = true;
 function leaderboard(){
     const themesSize = document.querySelector('#themes').clientWidth;
 
-    lboardButton.style.left = `${themesSize + 10}px`;
+    lboardButton.style.left = `${themesSize + 11}px`;
 }
 
 lboardButton.onclick = async function(){
@@ -20,6 +20,8 @@ lboardButton.onclick = async function(){
 
     if(hideLboard){
         loadingDiv.classList.remove('hidden');
+
+        await syncHighScore();
         const scores = await fetchTopScores();
         loadingDiv.classList.add('hidden');
         populateLeaderboard(scores);

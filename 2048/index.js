@@ -22,7 +22,8 @@ const   board = document.querySelector('#board'),
         undoMove = document.querySelector('#undo'),
         switchTiles = document.querySelector('#switch'),
         specialFeatures = document.querySelectorAll('.numMoves'),
-        specialButtons = document.querySelectorAll('.SPB');
+        specialButtons = document.querySelectorAll('.SPB'),
+        gameOverDiv = document.querySelector('#gameOver');
 
 const allowed = ["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown"];
 
@@ -39,6 +40,7 @@ let busy = false;
 let deleting = false;
 let switching = false;
 let rewardGiven = false;
+let gameEnded = false;
 
 // Recording where swip starts for mobile support
 let touchStartX = 0;
@@ -46,7 +48,8 @@ let touchStartY = 0;
 
 const previousHighScore = localStorage.getItem('highScore') !== null;
 let playerName = localStorage.getItem('playerName');      // Could be null...
-let lastSubmittedScore = Number(localStorage.getItem('lastSubmittedScore')) || 0;
+const prevSub = localStorage.getItem('lastSubmittedScore')
+let lastSubmittedScore = prevSub !== null ? Number(prevSub) : 0;
 
 document.addEventListener('keydown', async (e) => {
     if (busy)
@@ -143,20 +146,14 @@ async function gameLogic(key, newGrid, justMerge){
     tileColours();
     populate();
 
-    if (checkLost(grid)){
+    if (checkLost(grid)) {
         if (specialMoves.outOfMoves()){
-            if (playerName === null){
-                playerName = window.prompt("Game Over! Enter a username if you wanna check if your score is global level");
-
-                if (playerName !== null){
-                    localStorage.setItem('playerName', playerName);
-                    window.alert("You can now check global scores!\nClick Leaderboard button at the bottom");
-                }
-            }
-
-            window.alert("Game Over! Start a new game to try again.");
+            await pause(80);
+            await triggerGameOver();
+            return;
         }
     }
+
 }
 
 document.addEventListener('click', async (e) => {
@@ -239,11 +236,27 @@ function start(){
     populate();
 }
 
-function gameOver(){
-    if (!checkLost(grid))
-        return false;
+async function triggerGameOver(){
+    if (gameEnded) return;
 
-    return true;
+    gameEnded = true;
+    busy = true;
+
+    // Reset any transform state from previous animations
+    gameOverDiv.style.animation = 'none';
+    gameOverDiv.style.transform = 'translate(-50%, -50%) scale(0)';
+    gameOverDiv.classList.remove('hidden');
+
+    await gameOverDiv.animate(
+        [
+            { transform: 'translate(-50%, -50%) rotateZ(-360deg) scale(1)' }
+        ],
+        {
+            duration: 500,
+            easing: 'ease-out',
+            fill: 'forwards'
+        }
+    ).finished;
 }
 
 function populate(){
@@ -592,6 +605,45 @@ newGame.onclick = () => {
     location.reload();
 }
 
+document.querySelector('#restart').onclick = function(){
+    location.reload();
+}
+
+document.querySelector('#savour').onclick = async function(){
+    await gameOverDiv.animate(
+        [
+            { transform: 'translate(-50%, -50%) rotateZ(360deg) scale(0)' }
+        ],
+        {
+            duration: 500,
+            easing: 'ease-in',
+            fill: 'forwards'
+        }
+    ).finished;
+
+    gameOverDiv.classList.add('hidden');
+};
+
+document.querySelector('#checkLeaderboard').onclick = function(){
+    if (playerName === null){
+        playerName = window.prompt("Game Over! Enter a username if you wanna check if your score is global level");
+
+        if (playerName !== null){
+            document.querySelector('#savour').click();
+            lboardButton.click();
+        }
+
+        else{
+            window.alert("No gamer name == no leaderboard\nThanks for playing!")
+        }
+    }
+
+    else{
+        document.querySelector('#savour').click();
+        lboardButton.click();
+    }
+}
+
 function getClientUID() {
     let uid = localStorage.getItem("clientUID");
 
@@ -603,13 +655,14 @@ function getClientUID() {
     return uid;
 }
 
-function syncHighScore(){
+async function syncHighScore(){
     if (!playerName) return;
 
-    const localHigh = Number(localStorage.getItem('highScore')) || 0;
+    const score = localStorage.getItem('highScore');
+    const localHigh = score !== null ? Number(score) : 0;
 
     if (localHigh > lastSubmittedScore){
-        submitScore(playerName, localHigh);
+        await submitScore(playerName, localHigh);
         lastSubmittedScore = localHigh;
         localStorage.setItem('lastSubmittedScore', localHigh);
     }

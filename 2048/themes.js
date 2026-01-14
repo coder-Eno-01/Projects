@@ -16,6 +16,7 @@ function renderTheme(){
                 third: '#0d1b2a',
                 boardBackground: '#9caac3',
                 cells: '#8a98b0',
+                tileText: 'black',
 
                 tiles: {
                     2: '#edf2f8',
@@ -49,6 +50,7 @@ function renderTheme(){
                 base: '#040d12',          // page background (near-black blue)
                 second: '#183d3d',        // buttons / accents
                 third: '#000000',         // deep panels (themes, footer)
+                tileText: 'black',
 
                 // Board
                 boardBackground: '#183d3d',
@@ -92,6 +94,7 @@ function renderTheme(){
                 third: '#7a4a3a',
                 boardBackground: '#e3cfc5',
                 cells: '#d6b6a8',
+                tileText: 'black',
 
                 tiles: {
                     2: '#fdf4f1',
@@ -127,6 +130,7 @@ function renderTheme(){
 
                 boardBackground: '#141426',
                 cells: '#1f1f33',
+                tileText: 'white',
 
                 tiles: {
                     2: '#1e90ff',
@@ -160,9 +164,9 @@ function renderTheme(){
                 base: '#0f0f0f',
                 second: '#232d3f',
                 third: '#005b41',
-
                 boardBackground: '#232d3f',
                 cells: '#005b41',
+                tileText: 'white',
 
                 tiles: {
                     2:    '#008170',
@@ -197,9 +201,9 @@ function renderTheme(){
                 base: '#000000',
                 second: '#3e432e',
                 third: '#616f39',
-
                 boardBackground: '#3e432e',
                 cells: '#616f39',
+                tileText: 'black',
 
                 tiles: {
                     2:    '#a7d129',
@@ -236,6 +240,7 @@ function renderTheme(){
                 secondaryText: '#415a77',
                 boardBackground: '#9caac3',
                 cells: '#8a98b0',
+                tileText: 'black',
 
                 tiles: {
                     2: '#edf2f8',
@@ -325,6 +330,7 @@ function loadTheme(){
 
     document.querySelectorAll('.piece').forEach(piece => {
         piece.style.backgroundColor = colourScheme.getTile(piece.tile.value)
+        piece.style.color = colourScheme.tileText;
 
         if (piece.tile.value === 2048 && colourScheme.accent) {
             piece.style.boxShadow = `0 0 20px ${colourScheme.accent}`;
@@ -368,6 +374,14 @@ function loadTheme(){
     document.querySelector('.loader').style.borderTopColor = colourScheme.second;
     document.querySelector('#loading h3').style.color = colourScheme.third;
     document.querySelector('#loading h5').style.color = colourScheme.second;
+
+    // Game Over
+    gameOverDiv.style.backgroundColor = colourScheme.base
+    document.querySelectorAll('#gameOver div button').forEach(btn => {
+        btn.style.backgroundColor = colourScheme.scoreBoxes;
+        btn.style.color = colourScheme.scoreValue;
+        btn.style.borderColor = colourScheme.scoreBoardBackground;
+    })
 }
 
 function tileColours(){
