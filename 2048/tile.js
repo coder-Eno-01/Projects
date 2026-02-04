@@ -30,6 +30,7 @@ class Tile{
             this.element.classList.add('piece');
             this.element.dataset.value = this.value;
             this.element.style.backgroundColor = colourScheme.getTile(this.value);
+            this.element.style.color = colourScheme.tileText;
             this.element.tile = this;
             board.appendChild(this.element)
         }
