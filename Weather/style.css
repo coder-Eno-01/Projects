@@ -71,7 +71,7 @@ body{
     align-items: center;
     text-align: center;
 
-    padding: 5px 15px;
+    padding: 5px;
 }
 
 .card {
@@ -99,3 +99,36 @@ footer{
   }
 }
 
+.options {
+    align-self: stretch;
+    padding: 10px 14px;
+    margin: 5px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    background: rgba(255, 255, 255, 0.06);
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+
+    transition: background 0.15s ease, transform 0.15s ease;
+    white-space: pre-line;
+}
+
+.options:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+}
+
+.options h2, h4{
+    margin: 5px;
+}
+
+.options h4{
+    font-family: verdana;
+    color: #112240;
+}
