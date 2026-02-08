@@ -14,11 +14,49 @@
     </form>
 
     <div id="showData" class="card">
-        <h3 id="cityName" style="display: none;"></h3>
-        <h1 id="temp" style="display: none;"></h1>
-        <p id="description" style="display: none;"></p>
+        <h3 id="cityName" style="display: none"></h3>
+        <h1 id="temp" style="display: none"></h1>
+        <p id="description" style="display: none"></p>
         <img id="icon" src="https://www.svgrepo.com/show/527853/question-square.svg" alt="Weather Icon" height="100px">
-        <h4 id="error" style="display: none;"></h4>
+        <h4 id="error" style="display: none"></h4>
+    </div>
+
+    <button id="moreInfo" class="card" style="display: none">
+        <h5>More info</h5>
+        <img src="https://www.svgrepo.com/show/379885/collapse-down.svg" alt="Expand" width="30px">
+    </button>
+
+    <div id="expandInfo" style="display: none">
+        <div class="card2">
+            <div class="moreDataCard">
+                <p>Feels like</p><h3 id="feelsLikeTemp"></h3>
+            </div>
+            <div class="moreDataCard">
+                <p>Humidity</p><h3 id="humidityValue"></h3>
+            </div>
+            <div class="moreDataCard">
+                <p>Min</p><h3 id="minTemp"></h3>
+            </div>
+
+            <div class="moreDataCard">
+                <p>Max</p><h3 id="maxTemp"></h3>
+            </div>
+        </div>
+
+        <div class="card2">
+            <div class="moreDataCard">
+                <p>Pressure</p><h3 id="pressure"></h3>
+            </div>
+            <div class="moreDataCard">
+                <p>Wind Speed</p><h3 id="windSpeed"></h3>
+            </div>
+            <div class="moreDataCard">
+                <p>Wind Direction</p><h3 id="windDeg"></h3>
+            </div>
+            <div class="moreDataCard">
+                <p id="windDegDesc"></p>
+            </div>
+        </div>
     </div>
 
     <footer class="card">&copy; 2025 Eno - Project 0.1</footer>

@@ -4,6 +4,16 @@
   initial-value: 0deg;
 }
 
+@property --angle2 {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 360deg;
+}
+
+:root{
+    --dataCard: 25%;
+}
+
 html{
     min-height: 100%
 }
@@ -65,7 +75,7 @@ body{
 }
 
 #showData{
-    min-width: 35%;
+    min-width: var(--dataCard);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -73,13 +83,33 @@ body{
 
     padding: 5px;
 }
-
-.card {
-  background: rgba(255, 255, 255, 0.08);
+.card{
+    background: rgba(255, 255, 255, 0.08);
   border: 2px solid rgba(255, 255, 255, 0.15);
   border-radius: 10px;
   backdrop-filter: blur(12px);
   color: #e6edf3;
+}
+
+.card2 {
+    display: inline-block;
+    min-width: 250px;
+    padding: 5px 0px;
+
+    background: conic-gradient( 
+        from var(--angle2), 
+        #2c7da0, 
+        #1f4068, 
+        #0a192f, 
+        #112240, 
+        #2c7da0 
+    );
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    backdrop-filter: blur(12px);
+    color: #e6edf3;
+
+    animation: reverseSpin 10s linear infinite;
 }
 
 footer{
@@ -96,6 +126,15 @@ footer{
   }
   to {
     --angle: 360deg;
+  }
+}
+
+@keyframes reverseSpin {
+  from {
+    --angle2: 360deg;
+  }
+  to {
+    --angle2: 0deg;
   }
 }
 
@@ -132,3 +171,46 @@ footer{
     font-family: verdana;
     color: #112240;
 }
+
+@media (max-width: 600px){
+    :root{
+        --dataCard: 35%;
+    }
+}
+
+#moreInfo:hover img{
+    width: 35px;
+}
+
+#moreInfo:hover{
+    border-color: black;
+}
+
+#moreInfo:active{
+    background-color: white;
+}
+
+#moreInfo h5{
+    margin: 0px;
+    margin-top: 3px;
+    font-style: italic;
+    color: #0a192f;
+}
+
+.moreDataCard{
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 10px;
+    margin: 10px;
+}
+
+.moreDataCard p{
+    font-family: verdana;
+    color: #112240;
+    margin: 3px;
+}
+
+.moreDataCard h3{
+    margin: 3px;
+}
+
