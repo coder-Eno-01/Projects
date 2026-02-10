@@ -1,4 +1,5 @@
-const   API_KEY = "172f7543b9f3837cb362c160b64ea376",
+const   API_KEY_WEATHER = import.meta.env.VITE_GOOGLE_WEATHER_API_KEY,
+        API_KEY_GEOCODING = import.meta.env.VITE_GOOGLE_GEOCODING_API_KEY,
         cityInput = document.querySelector(".weatherData input"),
         cityName = document.getElementById("cityName"),
         temperature = document.getElementById("temp"),
@@ -101,7 +102,7 @@ moreInfo.onclick = () => {
 }
 
 async function getCoordinates(city){
-    const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(city)}&limit=7&appid=${API_KEY}`;
+    const geoUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(city)}&key=${API_KEY_GEOCODING}`;
     const response = await fetch(geoUrl);
 
     if (!response.ok){
@@ -110,11 +111,23 @@ async function getCoordinates(city){
 
     const data = await response.json();
 
-    if (data.length === 0){
+    if (data.results.length === 0){
         throw new Error("City not found");
     }
 
-    const geoData = data.map(({name, lat, lon, country, state}) => ({name, lat, lon, country, state}));
+    let geoData = [];
+
+    data.results.forEach(result => {
+        const { address_components: address,    
+                geometry: { location: { lat, lng: lon } }} = result;
+
+        const [{ long_name: name } = {},
+                {},
+               { long_name: state } = {}, 
+               { short_name: country } = {}] = address;
+        geoData.push({name, state, country, lat, lon});
+    });
+
     return geoData;
 }
 
@@ -126,7 +139,7 @@ async function selectionProcess(city){
 
 async function getWeather(geoData){
     const { lat, lon } = geoData;
-    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`;
+    const weatherUrl = `https://weather.googleapis.com/v1/currentConditions:lookup?key=${API_KEY_WEATHER}&location.latitude=${lat}&location.longitude=${lon}`;
     const response = await fetch(weatherUrl);
 
     if (!response.ok){
@@ -137,9 +150,9 @@ async function getWeather(geoData){
 }
 
 function displayWeather(){
-    const { name: city, 
-            main: {temp, humidity}, 
-            weather: [{description, id}]} = fetchedData.weather_data;
+    const { name: city } = fetchedData.geo_data;
+    const { temperature: {degrees: temp}, 
+            weatherCondition: {description : {text}, iconBaseUri}} = fetchedData.weather_data;
 
     err.style.display = "none";
     cityName.style.display = "block";
@@ -148,46 +161,36 @@ function displayWeather(){
     weatherIcon.style.display = "block";
 
     cityName.textContent = city;
-    temperature.textContent = `${Math.round(temp - 273.15)}°C`;
-    desc.textContent = description;
-    weatherIcon.src = getWeatherIcon(id);
+    temperature.textContent = `${Math.round(temp)}°C`;
+    desc.textContent = text;
+    weatherIcon.src = `${iconBaseUri}.png`;
     moreInfo.style.display = "block";
 }
 
 function displayMoreInfo(){
 
     const {
-        main: {feels_like, temp_min, temp_max, pressure, humidity},
-        wind: {speed, deg}} = fetchedData.weather_data;
+        currentConditionsHistory: { 
+            maxTemperature: {degrees: temp_max}, 
+            minTemperature: {degrees: temp_min}
+        },
+        feelsLikeTemperature: {degrees: feels_like},
+        airPressure: {meanSeaLevelMillibars: pressure},
+        wind: { 
+            direction : {degrees: deg, cardinal: dir},
+            speed: {value: wind_speed}
+        },
+        relativeHumidity: humidity,
+    } = fetchedData.weather_data;
 
-    feelsLike.textContent = `${Math.round(feels_like - 273.15)}°C`;
-    tempMin.textContent = `${Math.round(temp_min - 273.15)}°C`;
-    tempMax.textContent = `${Math.round(temp_max - 273.15)}°C`;
-    fpa.textContent = `${pressure / 10} kPa`;
+    feelsLike.textContent = `${Math.round(feels_like)}°C`;
+    tempMin.textContent = `${Math.round(temp_min)}°C`;
+    tempMax.textContent = `${Math.round(temp_max)}°C`;
+    fpa.textContent = `${(pressure / 10).toFixed(1)} kPa`;
     humid.textContent = `${humidity}%`;
-    windSpeed.textContent = `${Math.round(speed*3.6)} km/h`;
     windDeg.textContent = `${deg}°`;
-    windDir.textContent = `Coming from ${getWindDirection(deg)}`;
-}
-
-function getWeatherIcon(weatherId){
-    switch(true){
-        case weatherId >= 200 && weatherId < 300:
-            return "https://www.svgrepo.com/show/47960/thunderstorm-clouds.svg";
-        case weatherId >= 300 && weatherId < 500:
-            return "https://www.svgrepo.com/show/78889/drizzle.svg";
-        case weatherId >= 500 && weatherId < 600:
-            return "https://www.svgrepo.com/show/465969/rain.svg";
-        case weatherId >= 600 && weatherId < 700:
-            return "https://www.svgrepo.com/show/532065/snow-alt-1.svg";
-        case weatherId >= 700 && weatherId < 800:
-            return "https://www.svgrepo.com/show/474591/fog.svg";
-        case weatherId >= 800 && weatherId < 810:
-            return "https://www.svgrepo.com/show/526341/sun.svg"
-
-        default:
-            return "https://www.svgrepo.com/show/527853/question-square.svg";
-    }
+    windSpeed.textContent = `${wind_speed} km/h`;
+    windDir.textContent = `Coming from ${dir}`;
 }
 
 function displayError(message){
@@ -200,6 +203,10 @@ function displayError(message){
 }
 
 function resetUI(){
+    resetData();
+    expandInfo.style.display = "none";
+    moreInfoText.textContent = "More Info";
+    moreInfoImg.src = expand;
     showData.querySelectorAll(".options").forEach(el => el.remove());           // Clear previous options
     err.style.display = "none";
     cityName.style.display = "none";
@@ -241,43 +248,3 @@ function addOptions(){
         }
     });
 }
-
-function getWindDirection(deg) {
-    switch (true) {
-        case (deg >= 348.75 || deg < 11.25):
-            return "North";
-        case (deg >= 11.25 && deg < 33.75):
-            return "North-North-East";
-        case (deg >= 33.75 && deg < 56.25):
-            return "North-East";
-        case (deg >= 56.25 && deg < 78.75):
-            return "East-North-East";
-        case (deg >= 78.75 && deg < 101.25):
-            return "East";
-        case (deg >= 101.25 && deg < 123.75):
-            return "East-South-East";
-        case (deg >= 123.75 && deg < 146.25):
-            return "South-East";
-        case (deg >= 146.25 && deg < 168.75):
-            return "South-South-East";
-        case (deg >= 168.75 && deg < 191.25):
-            return "South";
-        case (deg >= 191.25 && deg < 213.75):
-            return "South-South-West";
-        case (deg >= 213.75 && deg < 236.25):
-            return "South-West";
-        case (deg >= 236.25 && deg < 258.75):
-            return "West-South-West";
-        case (deg >= 258.75 && deg < 281.25):
-            return "West";
-        case (deg >= 281.25 && deg < 303.75):
-            return "West-North-West";
-        case (deg >= 303.75 && deg < 326.25):
-            return "North-West";
-        case (deg >= 326.25 && deg < 348.75):
-            return "North-North-West";
-        default:
-            return "Unknown";
-    }
-}
-
