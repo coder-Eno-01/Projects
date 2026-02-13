@@ -1,4 +1,4 @@
-const   BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL,
+const   BACKEND_BASE_URL = import.meta.env.BACKEND_BASE_URL,
         cityInput = document.querySelector(".weatherData input"),
         cityName = document.getElementById("cityName"),
         temperature = document.getElementById("temp"),
