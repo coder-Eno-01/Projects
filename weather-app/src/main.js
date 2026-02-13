@@ -1,5 +1,4 @@
-const   API_KEY_WEATHER = import.meta.env.VITE_GOOGLE_WEATHER_API_KEY,
-        API_KEY_GEOCODING = import.meta.env.VITE_GOOGLE_GEOCODING_API_KEY,
+const   BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL,
         cityInput = document.querySelector(".weatherData input"),
         cityName = document.getElementById("cityName"),
         temperature = document.getElementById("temp"),
@@ -102,7 +101,7 @@ moreInfo.onclick = () => {
 }
 
 async function getCoordinates(city){
-    const geoUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(city)}&key=${API_KEY_GEOCODING}`;
+    const geoUrl = `${BACKEND_BASE_URL}/geocode?city=${encodeURIComponent(city)}`;
     const response = await fetch(geoUrl);
 
     if (!response.ok){
@@ -111,25 +110,13 @@ async function getCoordinates(city){
 
     const data = await response.json();
 
-    if (data.results.length === 0){
+    if (!data.geo_data || data.geo_data.length === 0){
         throw new Error("City not found");
     }
 
-    let geoData = [];
-
-    data.results.forEach(result => {
-        const { address_components: address,    
-                geometry: { location: { lat, lng: lon } }} = result;
-
-        const [{ long_name: name } = {},
-                {},
-               { long_name: state } = {}, 
-               { short_name: country } = {}] = address;
-        geoData.push({name, state, country, lat, lon});
-    });
-
-    return geoData;
+    return data.geo_data;
 }
+
 
 async function selectionProcess(city){
     fetchedData.updateGeoData(await getCoordinates(city));
@@ -139,20 +126,31 @@ async function selectionProcess(city){
 
 async function getWeather(geoData){
     const { lat, lon } = geoData;
-    const weatherUrl = `https://weather.googleapis.com/v1/currentConditions:lookup?key=${API_KEY_WEATHER}&location.latitude=${lat}&location.longitude=${lon}`;
+
+    const weatherUrl = `${BACKEND_BASE_URL}/weather?lat=${lat}&lon=${lon}`;
     const response = await fetch(weatherUrl);
 
     if (!response.ok){
         throw new Error("Failed to fetch weather data");
     }
 
-    return await response.json();
+    const data = await response.json();
+    console.log(data)
+    return data.weather;
 }
 
 function displayWeather(){
     const { name: city } = fetchedData.geo_data;
-    const { temperature: {degrees: temp}, 
-            weatherCondition: {description : {text}, iconBaseUri}} = fetchedData.weather_data;
+    const { temperature: {
+                degrees: temp
+            }, 
+            weatherCondition: {
+                description : {
+                    text, 
+                    iconBaseUri
+                }
+            }
+        } = fetchedData.weather_data;
 
     err.style.display = "none";
     cityName.style.display = "block";
@@ -171,8 +169,8 @@ function displayMoreInfo(){
 
     const {
         currentConditionsHistory: { 
-            maxTemperature: {degrees: temp_max}, 
-            minTemperature: {degrees: temp_min}
+            maxTemperature: temp_max, 
+            minTemperature: temp_min
         },
         feelsLikeTemperature: {degrees: feels_like},
         airPressure: {meanSeaLevelMillibars: pressure},
