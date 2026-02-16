@@ -1,4 +1,7 @@
-const   BACKEND_BASE_URL = import.meta.env.BACKEND_BASE_URL,
+const BACKEND_BASE_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:8080"               // If running locally
+        : ""
         cityInput = document.querySelector(".weatherData input"),
         cityName = document.getElementById("cityName"),
         temperature = document.getElementById("temp"),
@@ -110,16 +113,17 @@ async function getCoordinates(city){
 
     const data = await response.json();
 
-    if (!data.geo_data || data.geo_data.length === 0){
+    if (!data || data.length === 0){
         throw new Error("City not found");
     }
 
-    return data.geo_data;
+    return data;
 }
 
 
 async function selectionProcess(city){
-    fetchedData.updateGeoData(await getCoordinates(city));
+    const data = await getCoordinates(city);
+    fetchedData.updateGeoData(data);
 
     return fetchedData.geo_data.length === 1;     // Return true if only one location found, else false for multiple options
 }
@@ -135,21 +139,13 @@ async function getWeather(geoData){
     }
 
     const data = await response.json();
-    console.log(data)
-    return data.weather;
+    return data;
 }
 
 function displayWeather(){
     const { name: city } = fetchedData.geo_data;
-    const { temperature: {
-                degrees: temp
-            }, 
-            weatherCondition: {
-                description : {
-                    text, 
-                    iconBaseUri
-                }
-            }
+    const { temperature: temp, 
+            weatherCondition: {text, iconBaseUri}
         } = fetchedData.weather_data;
 
     err.style.display = "none";
@@ -166,17 +162,17 @@ function displayWeather(){
 }
 
 function displayMoreInfo(){
-
     const {
-        currentConditionsHistory: { 
-            maxTemperature: temp_max, 
-            minTemperature: temp_min
+        currentConditions: {
+            minTemperature: temp_min, 
+            maxTemperature: temp_max
         },
-        feelsLikeTemperature: {degrees: feels_like},
-        airPressure: {meanSeaLevelMillibars: pressure},
-        wind: { 
-            direction : {degrees: deg, cardinal: dir},
-            speed: {value: wind_speed}
+        feelsLikeTemperature: feels_like,
+        airPressure: pressure,
+        wind: {
+            degrees: deg, 
+            cardinal: dir,
+            speed:  wind_speed
         },
         relativeHumidity: humidity,
     } = fetchedData.weather_data;
