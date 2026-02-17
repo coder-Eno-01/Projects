@@ -21,12 +21,13 @@ html{
 body{
     min-height: 100%;
     padding: 0px;
+    padding-bottom: 45px;
     margin: 0px;
 
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
 
     --angle: 0deg;
     background: conic-gradient( 
@@ -62,14 +63,25 @@ body{
     );
 }
 
-.weatherData button{
+.weatherData button, #location{
     background: none;
     border: 3px solid #2c7da0;
     border-radius: 10px;
     cursor: pointer;
 }
 
-.weatherData button:active{
+.weatherData button{
+    anchor-name: --btn;
+}
+
+#location{
+    position-anchor: --btn;
+    position: absolute;
+    left: calc(anchor(right) + 3px);
+    top: anchor(top);
+}
+
+.weatherData button:active, #location:active{
     border-color: black;
     background-color: white;
 }
@@ -83,18 +95,19 @@ body{
 
     padding: 5px;
 }
+
 .card{
     background: rgba(255, 255, 255, 0.08);
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-  backdrop-filter: blur(12px);
-  color: #e6edf3;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    backdrop-filter: blur(12px);
+    color: #e6edf3;
 }
 
 .card2 {
-    display: inline-block;
-    min-width: 250px;
-    padding: 5px 0px;
+    width: 90%;
+    max-width: 350px;
+    padding: 0px;
 
     background: conic-gradient( 
         from var(--angle2), 
@@ -112,8 +125,12 @@ body{
     animation: reverseSpin 10s linear infinite;
 }
 
+.excessInfo{
+    display: none;
+}
+
 footer{
-    position: absolute;
+    position: fixed;
     bottom: 5px;
     right: 5px;
     display: inline-block;
@@ -163,7 +180,7 @@ footer{
     transform: translateY(-2px);
 }
 
-.options h2, h4{
+.options h2, .options h4{
     margin: 5px;
 }
 
@@ -214,3 +231,27 @@ footer{
     margin: 3px;
 }
 
+#precipHeader{
+    text-align: center;
+    margin: 0px;
+}
+
+.loader {
+    width: 50px;
+    height: 50px;
+
+    border: 5px solid rgba(255, 255, 255, 0.2);
+    border-top: 5px solid white;
+    border-radius: 50%;
+
+    animation: spinLoader 1s linear infinite;
+}
+
+@keyframes spinLoader {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
