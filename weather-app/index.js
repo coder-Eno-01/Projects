@@ -112,8 +112,14 @@ locaxn.onclick = () => {
             const { latitude: lat, longitude: lon } = position.coords;
 
             try {
-                fetchedData.updateGeoData({ name: "Your Current Location" , lat: lat, lon: lon});
+                fetchedData.updateGeoData({ 
+                    name: "Your Current Location", 
+                    lat: lat, lon: lon,
+                    country: "", 
+                    state: "" 
+                });
                 const weather = await getWeather(fetchedData.geo_data);
+                console.log(weather)
                 fetchedData.updateData(weather);
                 displayWeather();
             } catch (err) {
@@ -186,7 +192,7 @@ function displayWeather(){
     desc.style.display = "block";
     weatherIcon.style.display = "block";
 
-    cityName.textContent = `${city} (${nation})\n${province}`;
+    cityName.textContent = (nation && province) ? `${city} (${nation})\n${province}` : city;
     temperature.textContent = `${Math.round(temp)}°C`;
     desc.textContent = text;
     weatherIcon.src = `${iconBaseUri}.png`;
