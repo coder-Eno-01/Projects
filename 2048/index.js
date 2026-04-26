@@ -51,6 +51,8 @@ let playerName = localStorage.getItem('playerName');      // Could be null...
 const prevSub = localStorage.getItem('lastSubmittedScore')
 let lastSubmittedScore = prevSub !== null ? Number(prevSub) : 0;
 
+document.querySelector("#myFooter").textContent = `© ${new Date().getFullYear()} Eno - Project 0.2`
+
 document.addEventListener('keydown', async (e) => {
     if (busy)
         return;

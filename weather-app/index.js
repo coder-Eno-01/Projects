@@ -30,6 +30,7 @@ const   moreInfo = document.getElementById("moreInfo"),
         typ = document.getElementById("type"),
         excessInfo = document.querySelectorAll(".card2");
 
+document.getElementById("myFooter").textContent = `© ${new Date().getFullYear()} Eno - Project 0.3`;
 const fetchedData = {
     geo_data: null,
     weather_data: null,

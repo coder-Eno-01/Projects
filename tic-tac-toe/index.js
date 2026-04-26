@@ -20,6 +20,8 @@ let game;
 let mode;
 const THOUGHT_DURATION = 4;
 
+document.querySelector('#myFooter').textContent = `© ${new Date().getFullYear()} Eno - Project Zero`;
+
 function equalArrays(array1, array2){
     if (array1.length !== array2.length)
         return false;
