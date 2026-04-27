@@ -52,7 +52,7 @@ h4, img{
 }
 
 #gameLogo{
-    animation: turn 2s linear infinite;
+    animation: turn 4s linear infinite;
     transform-style: preserve-3d;
 }
 
