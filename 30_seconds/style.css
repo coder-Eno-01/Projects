@@ -30,6 +30,20 @@ body{
     right: 10px;
 }
 
+:root{
+    --feature_btn: 40px;
+}
+
+#settings img, #leaderboard img{
+    width: var(--feature_btn);
+}
+
+@media (max-width: 500px){
+    :root{
+        --feature_btn: 30px;
+    }
+}
+
 footer{
     bottom: 27px;
     right: 10px;
@@ -52,10 +66,6 @@ h4, img{
 }
 
 #gameLogo{
-    animation: turn 4s linear infinite;
-    transform-style: preserve-3d;
-}
-
-@keyframes turn{
-    50%  { transform: rotateY(100deg); }
+    border: 2px solid #061b3f;
+    box-shadow: 0px 0px 15px #020617;
 }
