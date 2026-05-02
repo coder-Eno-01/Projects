@@ -15,13 +15,13 @@ Each project focuses on practical implementation, from game logic and UI design 
 - **Tic Tac Toe**  
   A classic Tic Tac Toe game built to practice JavaScript fundamentals and DOM manipulation.
 
-- **2048 Game**  
+- **2048**  
   A recreation of the 2048 game, focusing on logic handling, state updates, and interactive UI design.
 
 - **Weather App**  
   A weather application that fetches real-time data from external APIs and displays it in a clean interface.
 
-- **30 Seconds Game (Coming Soon)**  
+- **31 Seconds (Coming Soon)**  
   A fast-paced quiz game inspired by "30 Seconds", featuring timed rounds and general knowledge questions.
 
 ## Notes

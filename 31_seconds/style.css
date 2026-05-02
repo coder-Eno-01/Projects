@@ -1,0 +1,68 @@
+html{
+    margin: 0px;
+    height: 100vh;
+}
+
+body {
+    height: 100%;
+    position: relative;
+    padding: 5px;
+    color: #e8f4ff;
+    background:
+        radial-gradient(circle at top left, rgba(59, 130, 246, 0.18), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.14), transparent 35%),
+        linear-gradient(135deg, #07111f, #0b1f33 50%, #07111f);
+    overflow: hidden;
+    text-align: center;
+}
+
+.card {
+    border: 1.5px solid rgba(180, 210, 230, 0.45);
+    border-radius: 14px;
+    padding: 12px 16px;
+    background: rgba(15, 35, 55, 0.72);
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.28),
+        inset 0 0 10px rgba(125, 211, 252, 0.06);
+    text-align: center;
+    color: #b9e6ff;
+}
+
+#settings, #leaderboard, footer{
+    display: inline-block;
+    position: absolute;
+}
+
+#settings{
+    left: 5px;
+}
+
+#leaderboard{
+    right: 5px;
+}
+
+footer{
+    bottom: 30px;
+    right: 5px;
+}
+
+
+:root{
+    --feature_btn: 40px;
+}
+
+#settings img, #leaderboard img{
+    width: var(--feature_btn);
+}
+
+@media (max-width: 500px){
+    :root{
+        --feature_btn: 30px;
+    }
+}
+
+#logo{
+    width: 30%;
+    max-width: 300px;
+    z-index: -1;
+}
