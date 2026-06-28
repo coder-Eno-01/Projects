@@ -103,6 +103,14 @@ function checkLost(grid0){
     return true;
 }
 
+function checkWon(grid0){
+    for(let innerGrid of grid0.grid){
+        if (innerGrid.includes(32))             // Need to change this to 2048 for the actual game, but 32 is used for testing purposes
+            return true;
+    }
+    return false;
+}
+
 function updateTargets(grid, shiftedGrid){
     shiftedGrid.updateCoords();
 

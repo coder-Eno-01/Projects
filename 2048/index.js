@@ -144,18 +144,11 @@ async function gameLogic(key, newGrid, justMerge){
 
     await pause(80);    // Slight pause before new tile spawns for user comfort
 
+    gameEndCheck();
+    // Need to work on game end checks, stopping here for now
     grid.addBlock();
     tileColours();
     populate();
-
-    if (checkLost(grid)) {
-        if (specialMoves.outOfMoves()){
-            await pause(80);
-            await triggerGameOver();
-            return;
-        }
-    }
-
 }
 
 document.addEventListener('click', async (e) => {
@@ -580,6 +573,7 @@ undoMove.onclick = async function(){
     updateSpecialMoves();
     specialMoveAnimation(U);
     loadTheme();
+    gameEndCheck();
 }
 
 switchTiles.onclick = async function(){
@@ -667,6 +661,24 @@ async function syncHighScore(){
         await submitScore(playerName, localHigh);
         lastSubmittedScore = localHigh;
         localStorage.setItem('lastSubmittedScore', localHigh);
+    }
+}
+
+async function gameEndCheck(){
+    if (checkLost(grid)) {
+        if (specialMoves.outOfMoves()){
+            await pause(80);
+            await triggerGameOver();
+            return;
+        }
+    }
+
+    if (checkWon(grid)){
+        /**
+         * Not sure how I should go about implementing a win. Should I just say you win in a bland way or prolly do some celebration animation?
+         * Also I'm thinking of implementing a second leaderboard just for actual winners, like maybe it should show top 5 winners perhaps with the scores they had when they won.
+         * Another thought is tracking how long they took to win but then again that'll expand some resources coz no but I don't need a timer running, what I can do is just log the time they make the first move then log the time the game catches a win and rank the winners according to speed yeah?  
+         */
     }
 }
 

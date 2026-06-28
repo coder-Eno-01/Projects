@@ -1,1 +1,0 @@
-document.querySelector("footer").textContent = `© ${new Date().getFullYear()} Eno - Project 0.4`;

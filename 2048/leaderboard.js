@@ -23,6 +23,7 @@ lboardButton.onclick = async function(){
 
         await syncHighScore();
         const scores = await fetchTopScores();
+        console.log(scores);
         loadingDiv.classList.add('hidden');
         populateLeaderboard(scores);
 
@@ -40,7 +41,21 @@ lboardButton.onclick = async function(){
 
 async function fetchTopScores() {
     const response = await fetch(`${API_BASE}/top`);
-    return response.json();
+
+    const data = await response.json().catch(() => null);
+
+    console.log("Top scores status:", response.status);
+    console.log("Top scores response:", data);
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch top scores: ${response.status}`);
+    }
+
+    if (!Array.isArray(data)) {
+        throw new Error("Top scores response is not an array");
+    }
+
+    return data;
 }
 
 async function submitScore(playerName, score) {
