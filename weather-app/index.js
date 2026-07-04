@@ -1,7 +1,7 @@
 const BACKEND_BASE_URL =
     window.location.hostname === "localhost"
         ? "http://localhost:8080"               // If running locally
-        : "https://weather-backend-fmxj.onrender.com",
+        : "https://backends.onrender.com/weather",
         cityInput = document.querySelector(".weatherData input"),
         cityName = document.getElementById("cityName"),
         temperature = document.getElementById("temp"),
