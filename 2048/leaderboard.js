@@ -1,6 +1,6 @@
 const lboardButton = document.querySelector('#leaderboard');
 const lboard = document.querySelector('#LeaderBoard');
-const API_BASE = "https://backends.onrender.com/2048/api/scores";
+const API_BASE = "https://backends-nxj9.onrender.com/2048/api/scores";
 let hideLboard = true;
 
 function leaderboard(){
