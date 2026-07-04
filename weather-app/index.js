@@ -288,7 +288,7 @@ function addOptions(){
 async function wakeBackend() {
     try {
         err.textContent = "Waking up the backend"
-        const response = await fetch(`${BACKEND_BASE_URL}/health`);
+        const response = await fetch(`${BACKEND_BASE_URL.slice(0, -7)}health`);
 
         if (!response.ok) {
             switch (response.status) {
