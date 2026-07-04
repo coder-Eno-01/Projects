@@ -1,7 +1,7 @@
 const BACKEND_BASE_URL =
     window.location.hostname === "localhost"
         ? "http://localhost:8080"               // If running locally
-        : "https://backends-nxj9.onrender.com/weather",
+        : "https://backends-nxj9.onrender.com",
         cityInput = document.querySelector(".weatherData input"),
         cityName = document.getElementById("cityName"),
         temperature = document.getElementById("temp"),
@@ -143,7 +143,7 @@ locaxn.onclick = () => {
 }
 
 async function getCoordinates(city){
-    const geoUrl = `${BACKEND_BASE_URL}/geocode?city=${encodeURIComponent(city)}`;
+    const geoUrl = `${BACKEND_BASE_URL}/weather/geocode?city=${encodeURIComponent(city)}`;
     const response = await fetch(geoUrl);
 
     if (!response.ok){
@@ -288,7 +288,7 @@ function addOptions(){
 async function wakeBackend() {
     try {
         err.textContent = "Waking up the backend"
-        const response = await fetch(`${BACKEND_BASE_URL.slice(0, -7)}health`);
+        const response = await fetch(`${BACKEND_BASE_URL}/health`);
 
         if (!response.ok) {
             switch (response.status) {
