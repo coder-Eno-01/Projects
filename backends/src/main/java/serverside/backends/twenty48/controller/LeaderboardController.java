@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController     // Tells Spring that this class handles HTTP requests and returns JSON
-@RequestMapping("/2048/api/scores")          // Base URL for everything in this controller
+@RequestMapping("/2048/api")          // Base URL for everything in this controller
 public class LeaderboardController {
     private final LeaderboardEntryRepository repository;
 
@@ -44,7 +44,7 @@ public class LeaderboardController {
                 });
     }
 
-    @GetMapping("/top")
+    @GetMapping("/scores/top")
     public List<LeaderboardEntry> getTopScores() {
         return repository.findTop5ByClientUidNotNullOrderByScoreDescCreatedAtAsc();
     }
