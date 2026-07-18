@@ -50,7 +50,7 @@ public class LeaderboardController {
     }
 
     @GetMapping("/player/{clientUid}")
-    public Optional<LeaderboardEntry> getPlayer(@PathVariable String clientUid){
-        return repository.findByClientUid(clientUid);
+    public LeaderboardEntry getPlayer(@PathVariable String clientUid){
+        return repository.findByClientUid(clientUid).orElse(null);
     }
 }
