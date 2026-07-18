@@ -2,15 +2,55 @@ body{
     min-height: 96vh;
     min-width: 90vw;
     margin: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 main{
     display: flex;
+    width: 100%;
+    max-width: var(--max_size);
     flex-direction: column;
+    column-fill: black;
     row-gap: 10px;
     margin: 5px;
-    justify-content: center;
 }
+
+#scoreBoard{
+    text-align: center;
+    border-radius: 16px;
+    padding: 5px 0px;
+    border-width: 3px;
+    border-style: solid;
+}
+
+#scoreBoard div{
+    display: inline-block;
+    margin: 2px;
+    padding: 10px 25px;
+    text-align: center;
+    background-color: #778da9;
+    border-radius: 10px;
+    font-size: 1.15em;
+    border: 3px solid #e0e1dd;
+}
+
+#scoreBoard h2{
+    margin: 0px;
+    color: #e0e1dd
+}
+
+#scoreBoard h3{
+    margin: 0px;
+    color: white;
+}
+
+#specialButtons{
+    text-align: center;
+    margin-top: 30px;
+}
+
 
 #leaderboard{
     position: absolute;
@@ -123,13 +163,42 @@ main{
 }
 
 #playerIcon{
+    position: relative;
     text-align: center;
     height: calc(0.4 * var(--board-size));
     width: calc(0.4 * var(--board-size));
     border-radius: 100px;
 }
+
 #playerIcon img{
     width: calc(0.4 * var(--board-size));
+    margin-top: 3px
+}
+
+#changeIcon{
+    position: absolute;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    right: -40px;
+    top: 0px;
+    transition: all 0.25s ease-in-out;
+}
+
+#changeIcon img{
+    width: 25px;
+    height: 25px;
+    margin: 5px 5px;
+}
+
+#changeIcon:hover{
+    transform: scale(1.1);
+    background-color: black;
+}
+
+#changeIcon:active{
+    background-color: red;
+    transform: scale(0.9);
 }
 
 #rankIcon{
@@ -177,42 +246,6 @@ footer{
     border-radius: 8px;
 }
 
-#scoreBoard{
-    align-self: center;
-    width: 98%;
-    margin-top: 5px;
-    text-align: center;
-    border-radius: 8px;
-    padding: 5px 0px;
-    border-width: 3px;
-    border-style: solid;
-}
-
-#scoreBoard div{
-    display: inline-block;
-    margin: 2px;
-    padding: 10px 25px;
-    text-align: center;
-    background-color: #778da9;
-    border-radius: 10px;
-    font-size: 1.15em;
-    border: 3px solid #e0e1dd;
-}
-
-#scoreBoard h2{
-    margin: 0px;
-    color: #e0e1dd
-}
-
-#scoreBoard h3{
-    margin: 0px;
-    color: white;
-}
-
-#specialButtons{
-    text-align: center;
-    margin-top: 30px;
-}
 
 .describe{
     visibility: hidden;
@@ -250,6 +283,7 @@ footer{
     --lboard-size: calc(var(--board-size) + 10px);
     --gap: 15px;
     --tile-size: 85px;
+    --max_size: 50%;
 }
 
 #board{
@@ -304,6 +338,7 @@ footer{
         --board-size: 92vw;
         --gap: calc(0.04 * 92vw);
         --tile-size: calc((92vw - 5 * var(--gap)) / 4);
+        --max_size: 85%;
     }
 }
 

@@ -1,7 +1,40 @@
 const lboardButton = document.querySelector('#leaderboard');
+const changeIcon = document.querySelector('#changeIcon');
 const lboard = document.querySelector('#LeaderBoard');
-const API_BASE = "https://backends-nxj9.onrender.com/2048/api/scores";
+const API_BASE = "https://backends-nxj9.onrender.com/2048/api";
 let hideLboard = true;
+
+const ICONS = {
+    icons: [
+        'default_profile',
+        'batman_black',
+        'batman_white',
+        'batman_face',
+        'queen',
+        'flower1',
+        'flower2',
+        'butterfly',
+        'cat_dark',
+        'cat_light',
+        'panda',
+        'football',
+        'brain',
+        'alien1',
+        'alien2',
+        'astronaut'
+
+    ],
+    numIcons: function (){return this.icons.length;}
+}
+
+const iconManager = {
+    currentIcon: Number(localStorage.getItem('leadingPlayerIcon')) ?? 0,
+    iconNext: function (){
+        this.currentIcon = (this.currentIcon >= ICONS.numIcons() - 1) ? 0 : ++this.currentIcon;
+    }
+}
+
+loadIcon(true);
 
 function leaderboard(){
     const themesSize = document.querySelector('#themes').clientWidth;
@@ -22,9 +55,9 @@ lboardButton.onclick = async function(){
         loadingDiv.classList.remove('hidden');
 
         await syncHighScore();
-        const scores = await fetchTopScores();
+        const data = await fetchTopScores();
         loadingDiv.classList.add('hidden');
-        populateLeaderboard(scores);
+        populateLeaderboard(...data);
 
         lboardButton.style.backgroundColor = 'hsla(163, 87%, 44%, 1.00)';
         lboard.classList.remove('hidden');
@@ -39,9 +72,11 @@ lboardButton.onclick = async function(){
 }
 
 async function fetchTopScores(attempt = 1) {
-    const data = await fetch(`${API_BASE}/top`)
+    const data = await fetch(`${API_BASE}/scores/top`)
     .then(rspns => {
-        if(!rspns.ok) throw new Error('Network response was not ok') 
+        if(!rspns.ok){
+            throw new Error('Network response was not ok');
+        } 
         else return rspns.json()
     })
     .catch(async (err) => {
@@ -52,18 +87,21 @@ async function fetchTopScores(attempt = 1) {
         }
     });
 
-    console.log(data);
-    return data;
+    const currentPlayerInfo = await fetch(`${API_BASE}/player/${CLIENT_UID}`)
+                                    .then(response => response.json())
+                                    .catch(err => null);
+
+    return [data, currentPlayerInfo];
 }
 
-async function submitScore(playerName, score) {
+async function submitScore(playerName, score, UID = CLIENT_UID) {
     const response = await fetch(API_BASE, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             playerName,
             score,
-            clientUid: CLIENT_UID
+            clientUid: UID
         })
 
     });
@@ -71,7 +109,7 @@ async function submitScore(playerName, score) {
     return response.json();
 }
 
-function populateLeaderboard(scores) {
+function populateLeaderboard(scores, currentPlayerInfo) {
     if (!scores || scores.length === 0) return;
 
     // ===== Leading player =====
@@ -96,9 +134,12 @@ function populateLeaderboard(scores) {
 
     leadingTime.textContent =
         days === 0 ? "Today" :
-        days === 1 ? "1 day ago" :
+        days === 1 ? "Yesterday" :
         `${days} days ago`;
 
+
+    // Only the leading player can change their icon
+    if (getClientUID() !== leading.clientUid && currentPlayerInfo?.role !== "DEVELOPER") changeIcon.style.display = 'none';
 
     // ===== Other leaders =====
     const leaders = document.querySelectorAll(".leader");
@@ -116,4 +157,21 @@ function populateLeaderboard(scores) {
         row.querySelector(".score").textContent = entry.score;
     });
 }
+
+function loadIcon(firstTime = false){
+    if (!firstTime){
+        iconManager.iconNext();
+    }
+    document.querySelector('#playerIcon img').src = `assets/${ICONS.icons[iconManager.currentIcon]}.svg`
+    localStorage.setItem('leadingPlayerIcon', iconManager.currentIcon);
+}
+
+changeIcon.onclick = async function() {
+    loadIcon();
+}
+
+
+
+
+
 

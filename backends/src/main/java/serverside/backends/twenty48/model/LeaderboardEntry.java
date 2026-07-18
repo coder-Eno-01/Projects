@@ -18,6 +18,7 @@ public class LeaderboardEntry {
     private String playerName;
     private String clientUid;
     private int score;
+    private String role;
 
     private Instant createdAt;
 
@@ -52,6 +53,13 @@ public class LeaderboardEntry {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public String getRole(){
+        return role;
+    }
+    public void setRole(String role){
+        this.role = role;
     }
 
     public Instant getCreatedAt() {

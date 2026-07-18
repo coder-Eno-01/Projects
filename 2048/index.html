@@ -64,38 +64,39 @@
 
     <div id="LeaderBoard" class="hidden">
         <div id="leadingPlayer">
-            <img id="rankIcon" src="https://www.svgrepo.com/show/513650/diamond.svg" alt="diamond rank">
+            <img id="rankIcon" src="assets/diamond_rank.svg" alt="diamond rank">
             <div id="playerIcon">
-                <img src="https://www.svgrepo.com/show/453446/account.svg" alt="Player Icon">
+                <img src="assets/default_profile.svg" alt="Player Icon">
+                <button id="changeIcon"><img src="assets/change_icon.svg"></button>
             </div>
-            <h4></h4>
-            <h2></h2>
-            <h5></h5>
+            <h4>Taku.cpp</h4>
+            <h2>74444</h2>
+            <h5>6 days ago</h5>
         </div>
         <div class="leader">
-            <img class="rank" src="https://www.svgrepo.com/show/452215/gold-medal.svg" alt="gold rank">
+            <img class="rank" src="assets/gold_medal.svg" alt="gold rank">
             <div class="player"></div>
             <div class="score"></div>
         </div>
         <div class="leader">
-            <img class="rank" src="https://www.svgrepo.com/show/452101/silver-medal.svg" alt="silver rank">
+            <img class="rank" src="assets/silver_medal.svg" alt="silver rank">
             <div class="player"></div>
             <div class="score"></div>
         </div>
         <div class="leader">
-            <img class="rank" src="https://www.svgrepo.com/show/452174/bronze-medal.svg" alt="bronze rank">
+            <img class="rank" src="assets/fourth_place.svg" alt="bronze rank">
             <div class="player"></div>
             <div class="score"></div>
         </div>
         <div class="leader">
-            <img class="rank" src="https://www.svgrepo.com/show/513229/medal.svg" alt="neutral medal">
+            <img class="rank" src="assets/fifth_place.svg" alt="neutral medal">
             <div class="player"></div>
             <div class="score"></div>
         </div>
     </div>
 
     <div id="gameOver" class="hidden">
-        <img src="https://i.pinimg.com/736x/cc/32/3c/cc323c2340cda6609b0820040b73ed63.jpg">
+        <img src="assets/the_end.jpg">
         <div>
             <button id="restart"><h4 class="GO">Restart</h4></button>
             <button id="checkLeaderboard"><h4 class="GO">Leaderboard</h4></button>
@@ -104,12 +105,12 @@
     </div>
 
     <footer id="myFooter"></footer>
-    <script src="tile.js"></script>
-    <script src="tilegrid.js"></script>
-    <script src="util.js"></script>
-    <script src="pushTile.js"></script>
-    <script src="themes.js"></script>
-    <script src="leaderboard.js"></script>
+    <script src="helpers/tile.js"></script>
+    <script src="helpers/tilegrid.js"></script>
+    <script src="helpers/util.js"></script>
+    <script src="helpers/pushTile.js"></script>
+    <script src="helpers/themes.js"></script>
+    <script src="helpers/leaderboard.js"></script>
     <script src="index.js"></script>
 </body>
 </html>

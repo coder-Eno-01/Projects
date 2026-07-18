@@ -5,6 +5,7 @@ import serverside.backends.twenty48.repository.LeaderboardEntryRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController     // Tells Spring that this class handles HTTP requests and returns JSON
@@ -37,11 +38,19 @@ public class LeaderboardController {
                     return existing;
                 })
                 // 4. First time submission
-                .orElseGet(() -> repository.save(entry));
+                .orElseGet(() -> {
+                    entry.setRole("PLAYER");
+                    return repository.save(entry);
+                });
     }
 
-        @GetMapping("/top")
+    @GetMapping("/top")
     public List<LeaderboardEntry> getTopScores() {
         return repository.findTop5ByClientUidNotNullOrderByScoreDescCreatedAtAsc();
+    }
+
+    @GetMapping("/player/{clientUid}")
+    public Optional<LeaderboardEntry> getPlayer(@PathVariable String clientUid){
+        return repository.findByClientUid(clientUid);
     }
 }
