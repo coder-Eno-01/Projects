@@ -23,7 +23,6 @@ lboardButton.onclick = async function(){
 
         await syncHighScore();
         const scores = await fetchTopScores();
-        console.log(scores);
         loadingDiv.classList.add('hidden');
         populateLeaderboard(scores);
 
@@ -39,22 +38,21 @@ lboardButton.onclick = async function(){
     }
 }
 
-async function fetchTopScores() {
-    const response = await fetch(`${API_BASE}/top`);
+async function fetchTopScores(attempt = 1) {
+    const data = await fetch(`${API_BASE}/top`)
+    .then(rspns => {
+        if(!rspns.ok) throw new Error('Network response was not ok') 
+        else return rspns.json()
+    })
+    .catch(async (err) => {
+        console.log(`Attempt ${attempt} failed due to ${err}. Retrying...`);
+        if (attempt < 3) {
+            await pause(3000); // Wait for 3 seconds before retrying
+            return fetchTopScores(++attempt);
+        }
+    });
 
-    const data = await response.json().catch(() => null);
-
-    console.log("Top scores status:", response.status);
-    console.log("Top scores response:", data);
-
-    if (!response.ok) {
-        throw new Error(`Failed to fetch top scores: ${response.status}`);
-    }
-
-    if (!Array.isArray(data)) {
-        throw new Error("Top scores response is not an array");
-    }
-
+    console.log(data);
     return data;
 }
 
