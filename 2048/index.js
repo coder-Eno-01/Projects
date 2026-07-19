@@ -47,9 +47,24 @@ let touchStartX = 0;
 let touchStartY = 0;
 
 const previousHighScore = localStorage.getItem('highScore') !== null;
-let playerName = localStorage.getItem('playerName');      // Could be null...
 const prevSub = localStorage.getItem('lastSubmittedScore')
 let lastSubmittedScore = prevSub !== null ? Number(prevSub) : 0;
+let playerName;
+let CLIENT_UID;
+
+const PLAYER_INFO = {
+    player: {
+        name: null,
+        score: 0,
+        uid: null,
+        role: "PLAYER",
+        iconID: null
+    },
+    DEFAULT_NAME: null,
+    update: function (newPlayer){
+        this.player = newPlayer;    // Should I do a deep copy??
+    }  
+}
 
 document.querySelector("#myFooter").textContent = `© ${new Date().getFullYear()} Eno - Project 0.2`
 
@@ -355,7 +370,7 @@ function updateScore(value){
 
             // Submitting score once per new high score
             if (playerName && score[1] > lastSubmittedScore){
-                submitScore(playerName, score[1]);
+                submitData(playerName, score[1]);
                 lastSubmittedScore = score[1];
                 localStorage.setItem('lastSubmittedScore', score[1]);
             }
@@ -648,7 +663,25 @@ function getClientUID() {
         localStorage.setItem("clientUID", uid);
     }
 
+    PLAYER_INFO.DEFAULT_NAME = uid.slice(0, 8);
     return uid;
+}
+
+function getPlayerName(){
+    let name = localStorage.getItem('playerName');
+
+    if (!name){
+        name = window.prompt("Enter name:");
+
+        if (!name) {
+            name = PLAYER_INFO.DEFAULT_NAME;
+            window.alert(`Name defaulted to ${name}\nYou can change it by accessing the Leaderboard`);
+        }
+
+        localStorage.setItem('playerName', name);
+    }
+
+    return name;
 }
 
 async function syncHighScore(){
@@ -658,7 +691,7 @@ async function syncHighScore(){
     const localHigh = score !== null ? Number(score) : 0;
 
     if (localHigh > lastSubmittedScore){
-        await submitScore(playerName, localHigh);
+        await submitData(playerName, localHigh);
         lastSubmittedScore = localHigh;
         localStorage.setItem('lastSubmittedScore', localHigh);
     }
@@ -682,9 +715,30 @@ async function gameEndCheck(){
     }
 }
 
-const CLIENT_UID = getClientUID();
-
 renderTheme();
 start();
 leaderboard();
 syncHighScore();
+
+window.addEventListener('DOMContentLoaded', async () => {         // ensuring these following steps run after window has loaded
+    CLIENT_UID = getClientUID();
+    playerName = getPlayerName();
+
+    const player =  await fetchFromDB(onlyFetchPlayer = true);
+    if(!player){
+        PLAYER_INFO.update(
+            {
+                name: playerName,
+                score: score[1],
+                uid: getClientUID(),
+                role: "PLAYER",
+            }
+        )
+    }
+
+    console.log(PLAYER_INFO)
+})
+
+// e2f412a8-bdfb-4a7b-ab46-b63264a34164
+// Eno_Dev_HP
+// 144

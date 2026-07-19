@@ -17,29 +17,41 @@ public class LeaderboardController {
         this.repository = repository;
     }
 
+    private boolean updated = false;
+
     @PostMapping
     public LeaderboardEntry submitScore(@RequestBody LeaderboardEntry entry) {
 
-        // 1. Reject invalid clients
+        // Reject invalid clients
         if (entry.getClientUid() == null || entry.getClientUid().isBlank()) {
             throw new IllegalArgumentException("clientUid is required");
         }
 
-        // 2. Check if this client already exists
+        // Check if this client already exists
         return repository.findByClientUid(entry.getClientUid())
                 .map(existing -> {
-                    // 3. Update only if new score is higher
+                    // Update only if changes present
                     if (entry.getScore() > existing.getScore()) {
                         existing.setScore(entry.getScore());
-                        existing.setPlayerName(entry.getPlayerName());
-                        return repository.save(existing);
+                        updated = true;
                     }
+
+                    // Update icon if there's been a change
+                    if (!existing.getIconID().equals(entry.getIconID())) {
+                        existing.setIconID(entry.getIconID());
+                        updated = true;
+                    }
+
+                    if(updated) return repository.save(existing);
+
                     // Otherwise keep old score
                     return existing;
                 })
-                // 4. First time submission
+
+                // First time submission
                 .orElseGet(() -> {
                     entry.setRole("PLAYER");
+                    entry.setIconID(null);
                     return repository.save(entry);
                 });
     }
@@ -50,7 +62,7 @@ public class LeaderboardController {
     }
 
     @GetMapping("/player/{clientUid}")
-    public LeaderboardEntry getPlayer(@PathVariable String clientUid){
-        return repository.findByClientUid(clientUid).orElse(null);
+    public Optional<LeaderboardEntry> getPlayer(@PathVariable String clientUid){
+        return repository.findByClientUid(clientUid);
     }
 }

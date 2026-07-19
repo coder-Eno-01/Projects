@@ -25,15 +25,15 @@
         </div>
 
         <div id="specialButtons">
-            <button id="undo" class="SPB">
+            <button id="undo" class="SPB" type="button">
                 ⟲
                 <span class="numMoves">1</span>
             </button>
-            <button id="delete" class="SPB">
+            <button id="delete" class="SPB" type="button">
                 🗑️
                 <span class="numMoves">1</span>
             </button>
-            <button id="switch" class="SPB">
+            <button id="switch" class="SPB" type="button">
                 ⇄
                 <span class="numMoves">1</span>
             </button>
@@ -43,16 +43,16 @@
             <!-- Tiles will be generated here -->
         </div>
 
-        <button id="newGame">New Game</button>
+        <button id="newGame" type="button">New Game</button>
     </main>
 
     <div id="themes">
         <h3>Themes</h3>
-        <button class="changeTheme">◀</button>
-        <button class="changeTheme">▶</button>
+        <button class="changeTheme" type="button">◀</button>
+        <button class="changeTheme" type="button">▶</button>
     </div>
 
-    <button id="leaderboard">
+    <button id="leaderboard" type="button">
         🏆
     </button>
 
@@ -67,7 +67,7 @@
             <img id="rankIcon" src="assets/diamond_rank.svg" alt="diamond rank">
             <div id="playerIcon">
                 <img src="assets/default_profile.svg" alt="Player Icon">
-                <button id="changeIcon"><img src="assets/change_icon.svg"></button>
+                <button id="changeIcon" type="button"><img src="assets/change_icon.svg" alt="Change Icon"></button>
             </div>
             <h4>Taku.cpp</h4>
             <h2>74444</h2>
@@ -96,11 +96,11 @@
     </div>
 
     <div id="gameOver" class="hidden">
-        <img src="assets/the_end.jpg">
+        <img src="assets/the_end.jpg" alt="Game Over">
         <div>
-            <button id="restart"><h4 class="GO">Restart</h4></button>
-            <button id="checkLeaderboard"><h4 class="GO">Leaderboard</h4></button>
-            <button id="savour"><h6 class="GO"><i>Savour Effort</i></h6></button>
+            <button id="restart" type="button"><h4 class="GO">Restart</h4></button>
+            <button id="checkLeaderboard" type="button"><h4 class="GO">Leaderboard</h4></button>
+            <button id="savour" type="button"><h6 class="GO"><i>Savour Effort</i></h6></button>
         </div>
     </div>
 

@@ -19,6 +19,7 @@ public class LeaderboardEntry {
     private String clientUid;
     private int score;
     private String role;
+    private Short iconID;
 
     private Instant createdAt;
 
@@ -60,6 +61,14 @@ public class LeaderboardEntry {
     }
     public void setRole(String role){
         this.role = role;
+    }
+
+    public Short getIconID(){
+        return iconID;
+    }
+
+    public void setIconID(Short iconID){
+        this.iconID = iconID;
     }
 
     public Instant getCreatedAt() {
