@@ -5,6 +5,7 @@ import serverside.backends.twenty48.repository.LeaderboardEntryRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*")
@@ -37,7 +38,7 @@ public class LeaderboardController {
                     }
 
                     // Update icon if there's been a change
-                    if (!existing.getIconID().equals(entry.getIconID())) {
+                    if (!Objects.equals(entry.getIconID(), existing.getIconID())) {
                         existing.setIconID(entry.getIconID());
                         updated = true;
                     }

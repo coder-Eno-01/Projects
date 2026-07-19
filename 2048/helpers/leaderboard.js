@@ -43,16 +43,17 @@ function leaderboard(){
 }
 
 lboardButton.onclick = async function(){
-    if (playerName === PLAYER_INFO.DEFAULT_NAME){
-        result = window.prompt(`Player name is currently default tag: ${playerName}\nEnter new name to change it or leave empty to continue`);
-
-        if (result){
-            playerName = result;
-            localStorage.setItem('playerName', playerName);
-        }
-    }
 
     if(hideLboard){
+        if (playerName === PLAYER_INFO.DEFAULT_NAME){
+            result = window.prompt(`Player name is currently default tag: ${playerName}\nEnter new name to change it or leave empty to continue`);
+
+            if (result){
+                playerName = result;
+                localStorage.setItem('playerName', playerName);
+            }
+        }
+        
         loadingDiv.classList.remove('hidden');
 
         await syncHighScore();
@@ -120,7 +121,7 @@ function populateLeaderboard(scores) {
     // ===== Leading player =====
     const leading = scores[0];
 
-    loadIcon(true. leading.iconID);
+    loadIcon(true, leading.iconID);
     const leadingName = document.querySelector('#leadingPlayer h4');
     const leadingScore = document.querySelector("#leadingPlayer h2");
     const leadingTime = document.querySelector("#leadingPlayer h5");
@@ -145,7 +146,7 @@ function populateLeaderboard(scores) {
 
 
     // Only the leading player can change their icon
-    if (getClientUID() !== leading.clientUid && PLAYER_INFO?.role !== "DEVELOPER") changeIcon.style.display = 'none';
+    if (getClientUID() !== leading.clientUid && PLAYER_INFO.player?.role !== "DEVELOPER") changeIcon.style.display = 'none';
 
     // ===== Other leaders =====
     const leaders = document.querySelectorAll(".leader");
@@ -164,7 +165,7 @@ function populateLeaderboard(scores) {
     });
 }
 
-function loadIcon(firstTime = false, iconID){
+function loadIcon(firstTime = false, iconID = null){
     if (!firstTime){
         iconManager.iconNext();
     }
@@ -186,7 +187,7 @@ changeIcon.onclick = async function() {
 async function startTimer(){
     timerRunning = true;
     changeIconTimer = setTimeout(() => {
-        submitData(playerName, score[1], icon_ID = iconManager.currentIcon);
+        submitData(playerName, score[1], CLIENT_UID, iconManager.currentIcon);
     }, 3000);
 }
 

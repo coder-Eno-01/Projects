@@ -370,7 +370,7 @@ function updateScore(value){
 
             // Submitting score once per new high score
             if (playerName && score[1] > lastSubmittedScore){
-                submitData(playerName, score[1]);
+                submitData(playerName, score[1], CLIENT_UID);
                 lastSubmittedScore = score[1];
                 localStorage.setItem('lastSubmittedScore', score[1]);
             }
@@ -691,7 +691,7 @@ async function syncHighScore(){
     const localHigh = score !== null ? Number(score) : 0;
 
     if (localHigh > lastSubmittedScore){
-        await submitData(playerName, localHigh);
+        await submitData(playerName, localHigh, CLIENT_UID);
         lastSubmittedScore = localHigh;
         localStorage.setItem('lastSubmittedScore', localHigh);
     }
@@ -723,8 +723,8 @@ syncHighScore();
 window.addEventListener('DOMContentLoaded', async () => {         // ensuring these following steps run after window has loaded
     CLIENT_UID = getClientUID();
     playerName = getPlayerName();
+    const player =  await fetchFromDB(1, true);
 
-    const player =  await fetchFromDB(onlyFetchPlayer = true);
     if(!player){
         PLAYER_INFO.update(
             {
@@ -735,10 +735,4 @@ window.addEventListener('DOMContentLoaded', async () => {         // ensuring th
             }
         )
     }
-
-    console.log(PLAYER_INFO)
 })
-
-// e2f412a8-bdfb-4a7b-ab46-b63264a34164
-// Eno_Dev_HP
-// 144
