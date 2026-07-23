@@ -83,8 +83,6 @@ async function fetchFromDB(attempt = 1, onlyFetchPlayer = false) {
     iconManager.DB_ICONS = await fetch(`${API_BASE}/icons`)
                                     .then(response => response.json())
                                     .catch(err => []);
-    console.log(iconManager.DB_ICONS);
-    return;
 
     if (onlyFetchPlayer) return PLAYER_INFO.player !== null;     // True means player pre-exists in DB
 
@@ -177,7 +175,7 @@ function loadIcon(firstTime = false, iconID = null){
         iconManager.iconNext();
     }
     else{
-        iconManager.currentIcon = iconID ?? 0;
+        iconManager.currentIcon = iconID ?? (iconManager.DB_ICONS.length ? Math.max(...iconManager.DB_ICONS) : 0);
     }
     document.querySelector('#playerIcon img').src = `assets/${ICONS.icons[iconManager.currentIcon]}.svg`;
 }
