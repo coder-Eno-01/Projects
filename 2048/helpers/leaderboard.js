@@ -4,7 +4,6 @@ const lboard = document.querySelector('#LeaderBoard');
 const API_BASE = "https://backends-nxj9.onrender.com/2048/api";
 let hideLboard = true;
 let changeIconTimer;
-let timerRunning = false;
 
 const ICONS = {
     icons: [
@@ -184,20 +183,15 @@ changeIcon.onclick = async function() {
     loadIcon();
 
     // Change Icon in DB if no change happens after 3 seconds
-    if (!timerRunning) startTimer();
-    else stopTimer();
-    
+    resetStartTimer();
 }
 
-async function startTimer(){
-    timerRunning = true;
+
+async function resetStartTimer(){
+    clearTimeout(changeIconTimer);
     changeIconTimer = setTimeout(() => {
         submitData(playerName, score[1], CLIENT_UID, iconManager.currentIcon);
     }, 3000);
-}
-
-async function stopTimer(){
-    clearTimeout(changeIconTimer);
 }
 
 
