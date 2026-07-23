@@ -64,6 +64,16 @@ class TileGrid{
         return this.get(...indices) === 0;
     }
 
+    freeCells(){
+        cells = [];
+
+        for (let i = 0; i < ROW; i++){
+            for (let j = 0; j < ROW; j++){
+                if (this.free(i, j)) cells.push([i, j]);
+            }
+        }
+    }
+
     updateCoords(){
         this.grid.forEach((element, outerIdx) => {
             element.forEach((item, innerIdx) => {
@@ -77,19 +87,12 @@ class TileGrid{
     addBlock(){
         const options = [2, 2, 2, 2, 4, 4]; // Set distribution possibilities
         const random = Math.floor(Math.random() * options.length) // Get random number
-        let found = false;
+        const emptyCells = this.freeCells();
 
-        while (!found){
-            // Get random location
-            const   x = Math.floor(Math.random() * 4),
-                    y = Math.floor(Math.random() * 4);
+        if (emptyCells.length === 0) return;
 
-            // Check and insert number if position is free
-            if (this.free(x, y)){
-                this.set(new Tile(options[random], [x, y]));
-                found = true;
-            }
-        }
+        const [x, y] = freeCells[Math.floor(Math.random() * freeCells.length)];
+        this.set(new Tile(options[random], [x, y]));
     }
 
     toString(){
