@@ -93,7 +93,7 @@ class TileGrid{
 
         if (emptyCells.length === 0) return;
 
-        const [x, y] = emptyCells[Math.floor(Math.random() * freeCells.length)];
+        const [x, y] = emptyCells[Math.floor(Math.random() * emptyCells.length)];
         this.set(new Tile(options[random], [x, y]));
     }
 
