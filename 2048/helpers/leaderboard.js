@@ -83,8 +83,6 @@ async function fetchFromDB(attempt = 1, onlyFetchPlayer = false) {
                                     .then(response => response.json())
                                     .catch(err => []);
 
-    console.log(iconManager);
-
     if (onlyFetchPlayer) return PLAYER_INFO.player !== null;     // True means player pre-exists in DB
 
     const data = await fetch(`${API_BASE}/scores/top`)

@@ -65,13 +65,15 @@ class TileGrid{
     }
 
     freeCells(){
-        cells = [];
+        let cells = [];
 
         for (let i = 0; i < ROW; i++){
             for (let j = 0; j < ROW; j++){
                 if (this.free(i, j)) cells.push([i, j]);
             }
         }
+
+        return cells;
     }
 
     updateCoords(){
@@ -91,7 +93,7 @@ class TileGrid{
 
         if (emptyCells.length === 0) return;
 
-        const [x, y] = freeCells[Math.floor(Math.random() * freeCells.length)];
+        const [x, y] = emptyCells[Math.floor(Math.random() * freeCells.length)];
         this.set(new Tile(options[random], [x, y]));
     }
 
