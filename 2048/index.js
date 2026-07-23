@@ -164,7 +164,7 @@ async function gameLogic(key, newGrid, justMerge){
             await triggerGameOver();
         }
         else {
-            if (!checkLost()) {
+            if (!checkLost(grid)) {
                 grid.addBlock();
                 tileColours();
                 populate();   
