@@ -4,7 +4,9 @@ import serverside.backends.twenty48.model.LeaderboardEntry;
 import serverside.backends.twenty48.repository.LeaderboardEntryRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -18,8 +20,6 @@ public class LeaderboardController {
         this.repository = repository;
     }
 
-    private boolean updated = false;
-
     @PostMapping
     public LeaderboardEntry submitScore(@RequestBody LeaderboardEntry entry) {
 
@@ -31,6 +31,8 @@ public class LeaderboardController {
         // Check if this client already exists
         return repository.findByClientUid(entry.getClientUid())
                 .map(existing -> {
+                    boolean updated = false;
+
                     // Update only if changes present
                     if (entry.getScore() > existing.getScore()) {
                         existing.setScore(entry.getScore());
@@ -65,5 +67,18 @@ public class LeaderboardController {
     @GetMapping("/player/{clientUid}")
     public Optional<LeaderboardEntry> getPlayer(@PathVariable String clientUid){
         return repository.findByClientUid(clientUid);
+    }
+
+    @GetMapping("/icons")
+    public List<Short> getIcons(@PathVariable String role){
+        List<LeaderboardEntry> entries = repository.findAllByRole(role).orElse(Collections.emptyList());
+
+        List<Short> icons = new ArrayList<>();
+
+        for (LeaderboardEntry entry : entries){
+            icons.add(entry.getIconID());
+        }
+
+        return icons;
     }
 }

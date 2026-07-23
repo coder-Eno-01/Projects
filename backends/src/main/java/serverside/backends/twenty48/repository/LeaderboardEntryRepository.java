@@ -10,6 +10,7 @@ public interface LeaderboardEntryRepository
         extends JpaRepository<LeaderboardEntry, Long> {
 
     Optional<LeaderboardEntry> findByClientUid(String clientUid);
+    Optional<List<LeaderboardEntry>> findAllByRole(String role);
 
     List<LeaderboardEntry> findTop5ByClientUidNotNullOrderByScoreDescCreatedAtAsc();
 }

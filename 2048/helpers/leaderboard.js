@@ -31,6 +31,7 @@ const ICONS = {
 
 const iconManager = {
     currentIcon: null,
+    DB_ICONS: [],
     iconNext: function (){
         this.currentIcon = (this.currentIcon >= ICONS.numIcons() - 1) ? 0 : ++this.currentIcon;
     }
@@ -78,6 +79,12 @@ async function fetchFromDB(attempt = 1, onlyFetchPlayer = false) {
     PLAYER_INFO.update(await fetch(`${API_BASE}/player/${CLIENT_UID}`)
                                 .then(response => response.json())
                                 .catch(err => null));
+
+    iconManager.DB_ICONS = await fetch(`${API_BASE}/icons`)
+                                    .then(response => response.json())
+                                    .catch(err => []);
+    console.log(iconManager.DB_ICONS);
+    return;
 
     if (onlyFetchPlayer) return PLAYER_INFO.player !== null;     // True means player pre-exists in DB
 
