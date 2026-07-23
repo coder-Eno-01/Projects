@@ -4,14 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2048</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="stylesheets/mainStyles.css">
+    <link rel="stylesheet" href="stylesheets/extraStyles.css">
     <link rel="icon" href="https://www.svgrepo.com/show/488071/block-toys.svg">
 </head>
 
 </script>
 
 <body>
-    <main>
+    <div id="homeScreen">
+        <div id="homeContent"></div>
+    </div>
+
+    <main class="gameHidden">
         <div id="scoreBoard">
             <div id="score">
                 <h2>Score</h2>
@@ -46,13 +51,13 @@
         <button id="newGame" type="button">New Game</button>
     </main>
 
-    <div id="themes">
+    <div id="themes" class="gameHidden">
         <h3>Themes</h3>
         <button class="changeTheme" type="button">◀</button>
         <button class="changeTheme" type="button">▶</button>
     </div>
 
-    <button id="leaderboard" type="button">
+    <button id="leaderboard" type="button" class="gameHidden">
         🏆
     </button>
 
@@ -69,9 +74,9 @@
                 <img src="assets/default_profile.svg" alt="Player Icon">
                 <button id="changeIcon" type="button"><img src="assets/change_icon.svg" alt="Change Icon"></button>
             </div>
-            <h4>Taku.cpp</h4>
-            <h2>74444</h2>
-            <h5>6 days ago</h5>
+            <h4></h4>
+            <h2></h2>
+            <h5></h5>
         </div>
         <div class="leader">
             <img class="rank" src="assets/gold_medal.svg" alt="gold rank">
@@ -111,6 +116,8 @@
     <script src="helpers/pushTile.js"></script>
     <script src="helpers/themes.js"></script>
     <script src="helpers/leaderboard.js"></script>
+    <script src="helpers/introAnimation.js"></script>
+    <script src="helpers/homeScreen.js"></script>
     <script src="index.js"></script>
 </body>
 </html>

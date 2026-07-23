@@ -1,0 +1,94 @@
+.gameHidden{
+    display: none;
+}
+
+#homeScreen{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: opacity 0.4s ease;
+}
+
+#homeScreen.fade-out{
+    opacity: 0;
+    pointer-events: none;
+}
+
+#homeContent{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    position: relative;
+}
+
+#playButton{
+    padding: 14px 52px;
+    font-size: 1.4em;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    letter-spacing: 1px;
+    opacity: 0;
+    animation: fadeInPlay 0.6s ease forwards;
+    animation-delay: 0.3s;
+}
+
+@keyframes fadeInPlay{
+    to{ opacity: 1; }
+}
+
+#homeTitle{
+    font-size: 5em;
+    margin: 0;
+    font-family: times, sans-serif;
+}
+
+@keyframes pulseGlow{
+    0%, 100%{ text-shadow: 0 0 20px currentColor; opacity: 0.85; }
+    50%{ text-shadow: 0 0 45px currentColor; opacity: 1; }
+}
+
+#demoBoard{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 260px;
+    height: 260px;
+    z-index: -1;
+    opacity: 0.35;
+}
+
+#demoBoard .demoTile{
+    position: absolute;
+    width: 55px;
+    height: 55px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    color: white;
+    transition: background-color 0.6s ease, opacity 0.6s ease;
+}
+
+.logoTile{
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2em;
+    font-family: times, sans-serif;
+    color: white;
+}

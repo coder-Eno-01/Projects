@@ -159,11 +159,18 @@ async function gameLogic(key, newGrid, justMerge){
 
     await pause(80);    // Slight pause before new tile spawns for user comfort
 
-    gameEndCheck();
+    await gameEndCheck().then(async result => {
+       if (result){
+            await triggerGameOver();
+        }
+        else {
+            grid.addBlock();
+            tileColours();
+            populate();
+        }
+    });
     // Need to work on game end checks, stopping here for now
-    grid.addBlock();
-    tileColours();
-    populate();
+    
 }
 
 document.addEventListener('click', async (e) => {
@@ -700,25 +707,41 @@ async function syncHighScore(){
 async function gameEndCheck(){
     if (checkLost(grid)) {
         if (specialMoves.outOfMoves()){
-            await pause(80);
-            await triggerGameOver();
-            return;
+            await pause(1500);
+            return true;
         }
     }
 
-    if (checkWon(grid)){
-        /**
-         * Not sure how I should go about implementing a win. Should I just say you win in a bland way or prolly do some celebration animation?
-         * Also I'm thinking of implementing a second leaderboard just for actual winners, like maybe it should show top 5 winners perhaps with the scores they had when they won.
-         * Another thought is tracking how long they took to win but then again that'll expand some resources coz no but I don't need a timer running, what I can do is just log the time they make the first move then log the time the game catches a win and rank the winners according to speed yeah?  
-         */
-    }
+    return false;
+
+    /*if (checkWon(grid)){
+        * Not sure how I should go about implementing a win. Should I just say you win in a bland way or prolly do some celebration animation?
+        * Also I'm thinking of implementing a second leaderboard just for actual winners, like maybe it should show top 5 winners perhaps with the scores they had when they won.
+        * Another thought is tracking how long they took to win but then again that'll expand some resources coz no but I don't need a timer running, what I can do is just log the time they make the first move then log the time the game catches a win and rank the winners according to speed yeah?  
+         
+    }*/
 }
 
 renderTheme();
-start();
-leaderboard();
-syncHighScore();
+
+renderHomeTileLogo();  // swap to renderHomeDemo() or renderHomeTileLogo() to preview the others
+
+document.querySelector('#playButton').addEventListener('click', async () => {
+    const homeScreen = document.querySelector('#homeScreen');
+    homeScreen.classList.add('fade-out');
+    await pause(400);
+    homeScreen.remove();
+
+    document.querySelector('main').classList.remove('gameHidden');
+    document.querySelector('#themes').classList.remove('gameHidden');
+    document.querySelector('#leaderboard').classList.remove('gameHidden');
+
+    leaderboard();
+    syncHighScore();
+
+    await playIntroCascade(); // swap for whichever intro animation you settled on
+    start();
+});
 
 window.addEventListener('DOMContentLoaded', async () => {         // ensuring these following steps run after window has loaded
     CLIENT_UID = getClientUID();
