@@ -70,8 +70,8 @@ public class LeaderboardController {
     }
 
     @GetMapping("/icons")
-    public List<Short> getIcons(String role){
-        List<LeaderboardEntry> entries = repository.findAllByRole(role).orElse(Collections.emptyList());
+    public List<Short> getIconsByDevs(){
+        List<LeaderboardEntry> entries = repository.findAllByRole("DEVELOPER").orElse(Collections.emptyList());
 
         List<Short> icons = new ArrayList<>();
 
